@@ -1,0 +1,151 @@
+###
+# CS 220 Fall 2009 Lab #3 Results
+# @author John Marshall (jmarsha6)
+##
+
+# All mathematical solutions verified using the built-in Gnome/Debian calculator
+
+########## PART B ##########
+
+# Addition 1:
+# 0xA4259929E9492903 + 0x2013AD2494AEFF72
+# Most-significant bits in %eax, least-significant in %ebx
+
+eax: 0xC439464E	ebx: 0x7DF82875
+
+
+# Addition 2:
+# 0x2425292949290322 + 0x2022474529AF72E2
+# Most-significant bits in %eax, least-significant in %ebx
+
+eax: 0x4447706E	ebx: 0x72D87604
+
+
+# Addition 3:
+# 0x6C4EC2E5423fa823 + 0xEF99287aB35D619D
+# Most-significant bits in %eax, least-significant in %ebx
+
+eax: 0x5BE7EB5F	ebx: 0xF59D09C0
+
+
+# Addition 4:
+# 0x2A0CCA0C0435B4BD + 0xC84B71931563A964
+# Most-significant bits in %eax, least-significant in %ebx
+
+eax: 0xF2583B9F	ebx: 0x19995E21
+
+
+# Division 1
+# 0xA241A35FE34383E4AF4563EADBCB47EF / 0x182341AA
+# Most to least significant in order (%eax %ebx %ecx %edx), remainder in %esi
+
+eax: 0x00000006	ebx: 0xB8DC2950	ecx: 0xDADC05DC	edx: 0x9ACE14B4 esi: 0x0713D467
+
+
+# Division 2
+# 0x4DC14D8B56206A660DFCC495FA570770 / 0xCB928F6D
+# Most to least significant in order (%eax %ebx %ecx %edx), remainder in %esi
+
+eax: 0x00000000	ebx: 0x61C7A8DA	ecx: 0x031A7273	edx: 0x9FF8B488 esi: 0x230A3188
+
+
+# Division 3
+# 0xA7C8BDD2E21F56132935BA8A97900B88 / 0x0414ED81
+# Most to least significant in order (%eax %ebx %ecx %edx), remainder in %esi
+
+eax: 0x00000029	ebx: 0x1B1F2462	ecx: 0xC1DB6CB5	edx: 0xF225AF3F esi: 0x026969C9
+
+
+# Division 4
+# 0x953AB8C9E89FA16489E8FDFA3E11F64C / 0x12D8E7F6
+# Most to least significant in order (%eax %ebx %ecx %edx), remainder in %esi
+
+eax: 0x00000007	ebx: 0xEAF6082D	ecx: 0xC9C9E31A	edx: 0x36FBEC43 esi: 0x074478EA
+
+
+# Multiplication 1
+# 0x2425292949290322 * 0x2013AD2494AEFF72
+# Most to least significant in order (%eax %ebx %ecx %edx)
+
+eax: 0x04876C59	ebx: 0x7E3E6FCD	ecx: 0x71504EBA	edx: 0x377E4324
+
+
+# Multiplication 2
+# 0xF9AAC6745812D947 * 0x8ECC6B114F7A899A
+# Most to least significant in order (%eax %ebx %ecx %edx)
+
+eax: 0x8B441695	ebx: 0xF05DA6E7	ecx: 0x503489DE	edx: 0x8673B3B6
+
+
+# Multiplication 3
+# 0x0A104C268EE489AB * 0xC18795F2A81F57F4
+# Most to least significant in order (%eax %ebx %ecx %edx)
+
+eax: 0x079B9DE6	ebx: 0x40660154	ecx: 0x4432A1FA	edx: 0xC05153FC
+
+
+# Multiplication 4
+# 0x9E266228B076BFC7 * 0x893C5CA7C8974F14
+# Most to least significant in order (%eax %ebx %ecx %edx)
+
+eax: 0x54C7D4C4	ebx: 0x3A35069A	ecx: 0x1F2DB452	edx: 0x04D6648C
+
+
+########## PART C ##########
+
+# Unpack 1
+# 34217 = 0b1000100001101111
+#            0x11  0x03 0x0F
+#               R     G    B
+# In registers %edx, %ecx, %eax, respectively
+
+ebx: 0x0000000F	ecx: 0x00000003	edx: 0x00000011
+
+
+# Unpack 2
+# 14753 = 0b0011100110100001
+#            0x07  0x0D 0x01
+#               R     G    B
+# In registers %edx, %ecx, %eax, respectively
+
+ebx: 0x00000001	ecx: 0x0000000D	edx: 0x00000007
+
+
+# Unpack 3
+# 28724 = 0b0111000000110100
+#            0x0E  0x01 0x14
+#               R     G    B
+# In registers %edx, %ecx, %eax, respectively
+
+ebx: 0x00000014	ecx: 0x00000001	edx: 0x0000000E
+
+
+# Pack 1
+# 0x6B2B = 0b0110101100111011
+#               13    25   11
+#                R     G    B
+# In register %eax
+
+eax: 0x0000
+
+
+# Pack 2
+# 0x6B2B = 0b0100000101000111
+#                8    10    7
+#                R     G    B
+# In register %eax
+
+eax: 0x00004147
+
+
+# Pack 3
+# 0x6B2B = 0b0110001000001001
+#               12    16    9
+#                R     G    B
+# In register %eax
+
+eax: 0x00006209
+
+
+## END
+

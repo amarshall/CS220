@@ -1,0 +1,43 @@
+# CS220 Lab #6
+# output.txt
+# @author John Marshall (jmarsha6)
+
+ironhide:~/CS220/Lab6> ./test
+You entered: Hello world!
+Size: 12
+You entered: How are you today?
+Size: 18
+You entered: Oh that's quite a shame.
+Size: 24
+
+ironhide:~/CS220/Lab6> ./test2
+You entered: Hello world!
+Size: 12
+You entered: How are you today?
+Size: 18
+You entered: Oh that's quite a shame.
+Size: 24
+
+ironhide:~/CS220/Lab6> ./test3
+You entered: Hello world!
+Size: 3
+You entered: How are you today?
+Size: 7
+You entered: Oh that's quite a shame.
+Size: 8
+
+ironhide:~/CS220/Lab6> ./test4
+You entered: hELLO WORLD!
+Size: 12
+You entered: hOW ARE YOU TODAY?
+Size: 18
+You entered: oH THAT'S QUITE A SHAME.
+Size: 24
+
+ironhide:~/CS220/Lab6> ./test5
+You entered: Ifmmp!xpsme"
+Size: 2
+You entered: Ipx!bsf!zpv!upebz@
+Size: 3
+You entered: Pi!uibu(t!rvjuf!b!tibnf/
+Size: 4
