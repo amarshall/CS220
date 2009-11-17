@@ -1,5 +1,5 @@
 # CS220 Lab #7
-# PartB.s
+# PartA.s
 # @author John Marshall (jmarsha6)
 
 # ===== VARIABLE MEMORY DEFS =====
@@ -7,10 +7,27 @@
 
 # --- end variable memory defs ---
 
-
+grade:	.int	0,0,0,0
 
 # ===== READ-ONLY MEMORY DEFS =====
 	.section	.rodata
+
+quiz1:	.int	90,75,80,85
+quiz2:	.int	60,80,90,90
+quiz3:	.int	100,90,50,75
+quiz4:	.int	
+quiz5:	.int	
+quiz6:	.int	
+quiz7:	.int	
+prj1:	.int	100,100,100,0
+prj2:	.int	
+prj3:	.int	
+prj4:	.int	
+prj5:	.int	
+prj6:	.int	
+prj7:	.int	
+midtrm:	.int	86,69,93,78
+finprj:	.int	
 
 # --- end read-only memory defs ---
 
