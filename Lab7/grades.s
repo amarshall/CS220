@@ -21,10 +21,11 @@ student2:	.byte	75,80,90,75,90,85,80,100,95,100,100,95,35,85,69,89
 student3:	.byte	80,90,50,80,80,85,60,100,100,95,100,98,75,95,93,90
 student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
 
+prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
+
 floatstr:
 	.string	"%f\n"
 	.size floatstr, .-floatstr
-
 
 # --- end read-only memory defs ---
 
@@ -42,7 +43,11 @@ main:
 	subl	$40, %esp
 
 	pushl	$student1
-	call	get_quiz_avg
+#	call	get_quiz_avg
+	popl	%eax
+
+	pushl	$student1
+	call	get_prj_avg
 	popl	%eax
 
 	fstpl	(%esp)
@@ -86,6 +91,39 @@ add_quiz:
 	ret
 	.size	get_quiz_avg, .-get_quiz_avg
 # --- end get_quiz_avg ---
+
+
+
+# ===== GET_PRJ_AVG =====
+	.type	get_prj_avg, @function
+get_prj_avg:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+	movl	8(%ebp), %ebx	# Location in memory of student
+	movl	$7, %ecx	# Loop through seven quizzes
+	fldz			# Load zero to start, then add to it
+
+add_prj:
+	movl	$0, %eax	# Ensure %eax is zero before manipulating
+	addl	$6, %ecx	# Counter and offset are different by 6
+	movb	(%ebx, %ecx), %al
+	subl	$6, %ecx	# Correct back for counter
+	cbtw			# Need to convert to word to satisfy FPU 
+	movw	%ax, temp
+
+	filds	temp		# Load current grade, run backwards
+	decl	%ecx
+	fmuls	prjmult(, %ecx, 4)	# Multiply by multiplier
+	incl	%ecx
+	faddp			# Add working to total
+	loop	add_prj		#   but addition is commutative, no worries
+
+	leave
+	ret
+	.size	get_prj_avg, .-get_prj_avg
+# --- end get_prj_avg ---
+
 
 
 
