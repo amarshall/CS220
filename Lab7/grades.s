@@ -5,11 +5,17 @@
 # ===== VARIABLE MEMORY DEFS =====
 	.data
 
+#	Format:	Quiz,Prj,TOTAL
+grade1:		.float	0,0,0
+grade2:		.float	0,0,0
+grade3:		.float	0,0,0
+grade4:		.float	0,0,0
+
+temp:		.byte	0
+
 # --- end variable memory defs ---
 
-grade:	.byte	0,0,0,0
 
-temp:	.int	0
 
 # ===== READ-ONLY MEMORY DEFS =====
 	.section	.rodata
@@ -23,9 +29,8 @@ student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
 
 prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
 
-floatstr:
-	.string	"%f\n"
-	.size floatstr, .-floatstr
+floatstr:	.string	"%.2f\n"
+		.size floatstr, .-floatstr
 
 # --- end read-only memory defs ---
 
@@ -42,13 +47,11 @@ main:
 
 	subl	$40, %esp
 
+	pushl	$grade1
 	pushl	$student1
-#	call	get_quiz_avg
-	popl	%eax
-
-	pushl	$student1
-	call	get_prj_avg
-	popl	%eax
+	call	compute_grade
+	popl	%ebx
+	popl	%ebx
 
 	fstpl	(%esp)
 	pushl	$floatstr
@@ -63,6 +66,20 @@ main:
 
 
 
+# ===== COMPUTE_GRADE =====
+	.type	compute_grade, @function
+compute_grade:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+
+
+	leave
+	ret
+	.size compute_grade, .-compute_grade
+# ----- compute_grade -----
+
+
 # ===== GET_QUIZ_AVG =====
 	.type	get_quiz_avg, @function
 get_quiz_avg:
@@ -75,13 +92,12 @@ get_quiz_avg:
 
 add_quiz:
 	movl	$0, %eax	# Ensure %eax is zero before manipulating
-	decl	%ecx		# Counter and offset are different by 1
-	movb	(%ebx, %ecx), %al
+	decl	%ecx		# Counter and offset differ by 1
+	movb	(%ebx, %ecx), %al	# Only want a byte
 	incl	%ecx		# Correct back for counter
-	cbtw			# Need to convert to word to satisfy FPU 
-	movw	%ax, temp
+	movw	%al, temp
 
-	fiadd	temp	# Add them up! This happens to run backwards
+	fiadd	temp		# Add to total, happens to run backwards,
 	loop	add_quiz	#   but addition is commutative, no worries
 
 	movw	$7, temp
@@ -106,11 +122,10 @@ get_prj_avg:
 
 add_prj:
 	movl	$0, %eax	# Ensure %eax is zero before manipulating
-	addl	$6, %ecx	# Counter and offset are different by 6
-	movb	(%ebx, %ecx), %al
+	addl	$6, %ecx	# Counter and offset differ by 6
+	movb	(%ebx, %ecx), %al	# Only want a byte
 	subl	$6, %ecx	# Correct back for counter
-	cbtw			# Need to convert to word to satisfy FPU 
-	movw	%ax, temp
+	movb	%al, temp
 
 	filds	temp		# Load current grade, run backwards
 	decl	%ecx
