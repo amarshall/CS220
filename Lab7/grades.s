@@ -120,7 +120,9 @@ compute_grade:
 	movb	%bl, temp
 	filds	temp
 	fmuls	glblmult(, %ecx, 4)
-	faddp			# Add up all the individual values
+
+	# Add up all the computed grades
+	faddp
 	faddp
 	faddp
 
@@ -131,7 +133,7 @@ compute_grade:
 	leave
 	ret
 	.size compute_grade, .-compute_grade
-# --- compute_grade ---
+# --- end compute_grade ---
 
 
 # ===== GET_QUIZ_AVG =====
