@@ -5,11 +5,10 @@
 # ===== VARIABLE MEMORY DEFS =====
 	.data
 
-#	Format:	Quiz,Prj,TOTAL
-grade1:		.float	0,0,0
-grade2:		.float	0,0,0
-grade3:		.float	0,0,0
-grade4:		.float	0,0,0
+grade1:		.float	0
+grade2:		.float	0
+grade3:		.float	0
+grade4:		.float	0
 
 temp:		.byte	0
 
@@ -28,6 +27,8 @@ student3:	.byte	80,90,50,80,80,85,60,100,100,95,100,98,75,95,93,90
 student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
 
 prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
+glblmult:	.float	.30, .30, .20, .20
+
 
 floatstr:	.string	"%.2f\n"
 		.size floatstr, .-floatstr
@@ -53,11 +54,11 @@ main:
 	popl	%ebx
 	popl	%ebx
 
-	fstpl	(%esp)
+	pushl	$grade1
 	pushl	$floatstr
 	call	printf
 	popl	%eax
-
+	popl	%eax
 
 	leave
 	ret
@@ -72,12 +73,53 @@ compute_grade:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
 
+	# Compute quizzes
+	movl	$0, %ecx
+	pushl	8(%ebp)
+	call	get_quiz_avg
+	fmuls	glblmult(, %ecx, 4)
+
+	# Compute projects
+	incl	%ecx
+	call	get_prj_avg	# 8(%ebp) still at top of stack
+	fmuls	glblmult(, %ecx, 4)
+	
+	popl	%eax
+
+	# Compute midterm
+	incl	%ecx
+	movl	8(%ebp), %eax
+	movl	$0, %ebx
+	movb	14(%eax), %bl
+	movb	%bl, temp
+	filds	temp
+	fmuls	glblmult(, %ecx, 4)
+
+	# Compute final project
+	incl	%ecx
+	movl	$0, %ebx
+	movb	15(%eax), %bl
+	movb	%bl, temp
+	filds	temp
+	fmuls	glblmult(, %ecx, 4)
+	faddp			# Add up all the individual values
+	faddp
+	faddp
+	movl	12(%ebp), %eax
+	fstps	(%eax)		# Store result in passed location
+
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
 
 	leave
 	ret
 	.size compute_grade, .-compute_grade
-# ----- compute_grade -----
+# --- compute_grade ---
 
 
 # ===== GET_QUIZ_AVG =====
