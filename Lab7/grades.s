@@ -51,14 +51,15 @@ main:
 	pushl	$grade1
 	pushl	$student1
 	call	compute_grade
+	fstps	grade1
 	popl	%ebx
 	popl	%ebx
 
 	pushl	$grade1
 	pushl	$floatstr
 	call	printf
-	popl	%eax
-	popl	%eax
+	popl	%ebx
+	popl	%ebx
 
 	leave
 	ret
@@ -109,8 +110,6 @@ compute_grade:
 	faddp			# Add up all the individual values
 	faddp
 	faddp
-	movl	12(%ebp), %eax
-	fstps	(%eax)		# Store result in passed location
 
 	popl	%ecx
 	popl	%ebx
@@ -127,6 +126,10 @@ compute_grade:
 get_quiz_avg:
 	pushl	%ebp
 	movl	%esp, %ebp
+
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
 
 	movl	8(%ebp), %ebx	# Location in memory of student
 	movl	$7, %ecx	# Loop through seven quizzes
@@ -145,6 +148,10 @@ add_quiz:
 	movw	$7, temp
 	fidiv	temp
 
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+
 	leave
 	ret
 	.size	get_quiz_avg, .-get_quiz_avg
@@ -157,6 +164,10 @@ add_quiz:
 get_prj_avg:
 	pushl	%ebp
 	movl	%esp, %ebp
+
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
 
 	movl	8(%ebp), %ebx	# Location in memory of student
 	movl	$7, %ecx	# Loop through seven quizzes
@@ -174,7 +185,11 @@ add_prj:
 	fmuls	prjmult(, %ecx, 4)	# Multiply by multiplier
 	incl	%ecx
 	faddp			# Add working to total
-	loop	add_prj		#   but addition is commutative, no worries
+	loop	add_prj
+
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
 
 	leave
 	ret
