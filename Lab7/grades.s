@@ -83,6 +83,7 @@ main:
 
 
 # ===== COMPUTE_GRADE =====
+# @returns Result in %st
 	.type	compute_grade, @function
 compute_grade:
 	pushl	%ebp
@@ -136,6 +137,7 @@ compute_grade:
 
 
 # ===== GET_QUIZ_AVG =====
+# @returns Result in %st
 	.type	get_quiz_avg, @function
 get_quiz_avg:
 	pushl	%ebp
@@ -174,6 +176,7 @@ add_quiz:
 
 
 # ===== GET_PRJ_AVG =====
+# @returns Result in %st
 	.type	get_prj_avg, @function
 get_prj_avg:
 	pushl	%ebp
@@ -209,7 +212,6 @@ add_prj:
 	ret
 	.size	get_prj_avg, .-get_prj_avg
 # --- end get_prj_avg ---
-
 
 
 
