@@ -48,11 +48,9 @@ main:
 
 	subl	$40, %esp
 
-	pushl	$grade1
 	pushl	$student1
 	call	compute_grade
 	fstps	grade1
-	popl	%ebx
 	popl	%ebx
 
 	pushf
