@@ -50,7 +50,6 @@ main:
 
 	pushl	$student1
 	call	compute_grade
-	fstps	grade1
 	popl	%ebx
 
 	pushf
@@ -60,10 +59,9 @@ main:
 	pushl	%edx
 	pushl	%esi
 	pushl	%edi
-	pushl	$grade1
+	fstpl	(%esp)
 	pushl	$floatstr
 	call	printf
-	popl	%ebx
 	popl	%ebx
 	popl	%edi
 	popl	%esi
