@@ -95,7 +95,7 @@ add_quiz:
 	decl	%ecx		# Counter and offset differ by 1
 	movb	(%ebx, %ecx), %al	# Only want a byte
 	incl	%ecx		# Correct back for counter
-	movw	%al, temp
+	movb	%al, temp
 
 	fiadd	temp		# Add to total, happens to run backwards,
 	loop	add_quiz	#   but addition is commutative, no worries
