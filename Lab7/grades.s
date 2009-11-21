@@ -55,11 +55,25 @@ main:
 	popl	%ebx
 	popl	%ebx
 
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
 	pushl	$grade1
 	pushl	$floatstr
 	call	printf
 	popl	%ebx
 	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
 
 	leave
 	ret
