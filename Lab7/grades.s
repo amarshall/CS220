@@ -152,6 +152,59 @@ main:
 	popl	%eax
 	popf
 
+
+
+	# Compute & print student "five" (worst)
+	pushl	$worstgrades
+	call	compute_grade
+	popl	%ebx
+
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	fstpl	(%esp)
+	pushl	$floatstr
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+
+
+
+	# Compute & print student "six" (best)
+	pushl	$bestgrades
+	call	compute_grade
+	popl	%ebx
+
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	fstpl	(%esp)
+	pushl	$floatstr
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+
+
 	leave
 	ret
 	.size	main, .-main
