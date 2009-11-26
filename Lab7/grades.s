@@ -47,8 +47,85 @@ main:
 	movl	%esp, %ebp
 
 	subl	$40, %esp
-
+	
+	
+	# Compute & print student one
 	pushl	$student1
+	call	compute_grade
+	popl	%ebx
+
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	fstpl	(%esp)
+	pushl	$floatstr
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+	
+	
+	# Compute & print student two
+	pushl	$student2
+	call	compute_grade
+	popl	%ebx
+
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	fstpl	(%esp)
+	pushl	$floatstr
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+	
+	
+	# Compute & print student three
+	pushl	$student3
+	call	compute_grade
+	popl	%ebx
+
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	fstpl	(%esp)
+	pushl	$floatstr
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+	
+	
+	# Compute & print student four
+	pushl	$student4
 	call	compute_grade
 	popl	%ebx
 
