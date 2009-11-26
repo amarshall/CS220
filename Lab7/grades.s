@@ -5,10 +5,11 @@
 # ===== VARIABLE MEMORY DEFS =====
 	.data
 
-grade1:		.float	0
-grade2:		.float	0
-grade3:		.float	0
-grade4:		.float	0
+# Character bytes for each respective student's *letter* grades
+grade1:		.byte	0
+grade2:		.byte	0
+grade3:		.byte	0
+grade4:		.byte	0
 
 temp:		.byte	0
 
