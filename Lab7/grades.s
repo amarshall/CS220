@@ -11,6 +11,9 @@ grade2:		.byte	0
 grade3:		.byte	0
 grade4:		.byte	0
 
+worstgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+bestgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
 temp:		.byte	0
 
 # --- end variable memory defs ---
@@ -297,7 +300,13 @@ compute_worst:
 	pushl	%ebp
 	movl	%esp, %ebp
 
-
+	movq	student1, %mm0
+	pcmpgtb	student2, %mm0	# Which is compared as being greater?
+	movq	student1, %mm1
+	pand	%mm0, %mm1	# This and statement below may be reversed, need to
+	pandn	student2, %mm0	#    check logic of this process, see above comment
+	paddb	%mm1, %mm0	# Should combine both, since either a value or zero
+	movq	%mm0, worstgrades
 
 	leave
 	ret
