@@ -291,6 +291,36 @@ add_prj:
 
 
 
+# ===== COMPUTE_WORST =====
+	.type	get_prj_avg, @function
+compute_worst:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+
+
+	leave
+	ret
+	.size	compute_worst, .-compute_worst
+# --- end get_prj_avg ---
+
+
+
+# ===== COMPUTE_BEST =====
+	.type	get_prj_avg, @function
+compute_best:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+
+
+	leave
+	ret
+	.size	compute_best, .-compute_best
+# --- end get_prj_avg ---
+
+
+
 # !!!!! DO NOT MODIFY BELOW !!!!!
 	.section	.note.GNU-stack,"",@progbits
 	.ident	"GCC: (GNU) 3.3.5"
