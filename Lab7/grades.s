@@ -5,16 +5,11 @@
 # ===== VARIABLE MEMORY DEFS =====
 	.data
 
-# Character bytes for each respective student's *letter* grades
-grade1:		.byte	0
-grade2:		.byte	0
-grade3:		.byte	0
-grade4:		.byte	0
-
 worstgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 bestgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 temp:		.byte	0
+templ:		.long	0
 
 # --- end variable memory defs ---
 
@@ -33,9 +28,32 @@ student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
 prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
 glblmult:	.float	.30, .30, .20, .20
 
+#			 A,A-,B+, B,B-,C+, C,C+, D,0
+thresholds:	.int	93,90,87,83,80,77,73,70,65,0
+gradeA:		.string	"A"
+		.size gradeA, .-gradeA
+gradeAm:	.string	"A-"
+		.size gradeAm, .-gradeAm
+gradeBp:	.string	"B+"
+		.size gradeBp, .-gradeBp
+gradeB:		.string	"B"
+		.size gradeB, .-gradeB
+gradeBm:	.string	"B-"
+		.size gradeBm, .-gradeBm
+gradeCp:	.string	"C+"
+		.size gradeCp, .-gradeCp
+gradeC:		.string	"C"
+		.size gradeC, .-gradeC
+gradeCm:	.string	"C-"
+		.size gradeCm, .-gradeCm
+gradeD:		.string	"D"
+		.size gradeD, .-gradeD
+
 
 floatstr:	.string	"%.2f\n"
 		.size floatstr, .-floatstr
+decstr:		.string	"%hhd\n"
+		.size decstr, .-decstr
 
 # --- end read-only memory defs ---
 
@@ -159,6 +177,10 @@ main:
 	call	compute_grade
 	popl	%ebx
 
+	pushl	$worstgrades
+	call	print_grades
+	popl	%ebx
+
 	pushf
 	pushl	%eax
 	pushl	%ebx
@@ -183,6 +205,7 @@ main:
 	pushl	$bestgrades
 	call	compute_grade
 	popl	%ebx
+
 
 	pushf
 	pushl	%eax
@@ -354,33 +377,38 @@ compute_worst:
 
 	pushl	%ecx
 
-	movl	$0, %ecx
+	movl	$-1, %ecx
 cwmmx:
-	movq	student1(,%ecx,8), %mm0
-	pcmpgtb	student2(,%ecx,8), %mm0	# Which is compared as being greater?
-	movq	student1(,%ecx,8), %mm1
-	pandn	%mm0, %mm1	# This and statement below may be reversed, need to
-	pand	student2(,%ecx,8), %mm0	#    check logic of this process, see above comment
-	paddb	%mm1, %mm0	# Should combine both, since either a value or zero
-
-	movq	%mm0, %mm2
-	pcmpgtb	student3(,%ecx,8), %mm2	# Which is compared as being greater?
-	pandn	%mm2, %mm0	# This and statement below may be reversed, need to
-	pand	student3(,%ecx,8), %mm2	#    check logic of this process, see above comment
-	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
-
-	movq	%mm0, %mm2
-	pcmpgtb	student4(,%ecx,8), %mm2	# Which is compared as being greater?
-	pandn	%mm2, %mm0	# This and statement below may be reversed, need to
-	pand	student4(,%ecx,8), %mm2	#    check logic of this process, see above comment
-	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
-
-	movq	%mm0, worstgrades(,%ecx,8)
-	cmpl	$0, %ecx
 	incl	%ecx
+	movq	student1(,%ecx,8), %mm0
+	pcmpgtb	student2(,%ecx,8), %mm0
+	movq	student1(,%ecx,8), %mm1
+	movq	%mm0, %mm2
+	pandn	%mm1, %mm0
+	pand	student2(,%ecx,8), %mm2
+	paddb	%mm2, %mm0
+
+	movq	%mm0, %mm2
+	pcmpgtb	student3(,%ecx,8), %mm2
+	movq	%mm2, %mm1
+	pandn	%mm0, %mm2
+	pand	student3(,%ecx,8), %mm1
+	paddb	%mm2, %mm1
+	movq	%mm1, %mm0
+
+	movq	%mm0, %mm2
+	pcmpgtb	student4(,%ecx,8), %mm2
+	movq	%mm2, %mm1
+	pandn	%mm0, %mm2
+	pand	student4(,%ecx,8), %mm1
+	paddb	%mm2, %mm1
+
+	movq	%mm1, worstgrades(,%ecx,8)
+	cmp	$0, %ecx
 	je	cwmmx
 
 	popl	%ecx
+	emms
 
 	leave
 	ret
@@ -397,38 +425,57 @@ compute_best:
 
 	pushl	%ecx
 
-	movl	$0, %ecx
+	movl	$-1, %ecx
 cbmmx:
-	movq	student1(,%ecx,8), %mm0
-	pcmpgtb	student2(,%ecx,8), %mm0	# Which is compared as being greater?
-	movq	student1(,%ecx,8), %mm1
-	pand	%mm0, %mm1	# This and statement below may be reversed, need to
-	pandn	student2(,%ecx,8), %mm0	#    check logic of this process, see above comment
-	paddb	%mm1, %mm0	# Should combine both, since either a value or zero
-
-	movq	%mm0, %mm2
-	pcmpgtb	student3(,%ecx,8), %mm2	# Which is compared as being greater?
-	pand	%mm2, %mm0	# This and statement below may be reversed, need to
-	pandn	student3(,%ecx,8), %mm2	#    check logic of this process, see above comment
-	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
-
-	movq	%mm0, %mm2
-	pcmpgtb	student4(,%ecx,8), %mm2	# Which is compared as being greater?
-	pand	%mm2, %mm0	# This and statement below may be reversed, need to
-	pandn	student4(,%ecx,8), %mm2	#    check logic of this process, see above comment
-	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
-
-	movq	%mm0, worstgrades(,%ecx,8)
-	cmpl	$0, %ecx
 	incl	%ecx
-	je	cwmmx
+	movq	student1(,%ecx,8), %mm0
+	pcmpgtb	student2(,%ecx,8), %mm0
+	movq	student1(,%ecx,8), %mm1
+	pand	%mm0, %mm1
+	pandn	student2(,%ecx,8), %mm0
+	paddb	%mm1, %mm0
+
+	movq	%mm0, %mm2
+	pcmpgtb	student3(,%ecx,8), %mm2
+	pand	%mm2, %mm0
+	pandn	student3(,%ecx,8), %mm2
+	paddb	%mm2, %mm0
+
+	movq	%mm0, %mm2
+	pcmpgtb	student4(,%ecx,8), %mm2
+	pand	%mm2, %mm0
+	pandn	student4(,%ecx,8), %mm2
+	paddb	%mm2, %mm0
+
+	movq	%mm0, bestgrades(,%ecx,8)
+	cmp	$0, %ecx
+	je	cbmmx
 
 	popl	%ecx
+	emms
 
 	leave
 	ret
 	.size	compute_best, .-compute_best
 # --- end get_prj_avg ---
+
+
+
+# ===== GET_LETTER =====
+# @args	The floating point grade in %st(0)
+# @returns	Char for letter in %eax
+	.type	get_prj_avg, @function
+get_letter:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+	filds	thresholds(,%esi,4)
+#	fcomi	%ebx
+
+	leave
+	ret
+	.size	get_letter, .-get_letter
+# --- end get_letter ---
 
 
 
@@ -445,7 +492,6 @@ print_grades:
 	pushl	%ecx
 
 	movl	$16, %ecx
-	movl	$0, %eax
 	movl	8(%ebp), %ebx
 
 prntgrades:
@@ -456,9 +502,10 @@ prntgrades:
 	pushl	%edx
 	pushl	%esi
 	pushl	%edi
-	pushl	(%ebx, %eax, 4)
-	pushl	$floatstr
+	pushl	(%ebx)
+	pushl	$decstr
 	call	printf
+	popl	%ebx
 	popl	%ebx
 	popl	%edi
 	popl	%esi
@@ -467,7 +514,7 @@ prntgrades:
 	popl	%ebx
 	popl	%eax
 	popf
-	incl	%eax
+	incl	%ebx
 	loop	prntgrades
 
 	popl	%ecx
@@ -477,7 +524,7 @@ prntgrades:
 	leave
 	ret
 	.size	print_grades, .-print_grades
-# --- end print_gradesg ---
+# --- end print_grades ---
 
 
 
