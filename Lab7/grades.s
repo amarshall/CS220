@@ -153,8 +153,8 @@ main:
 	popf
 
 
-
 	# Compute & print student "five" (worst)
+	call	compute_worst
 	pushl	$worstgrades
 	call	compute_grade
 	popl	%ebx
@@ -178,9 +178,8 @@ main:
 	popl	%eax
 	popf
 
-
-
 	# Compute & print student "six" (best)
+	call	compute_best
 	pushl	$bestgrades
 	call	compute_grade
 	popl	%ebx
@@ -353,13 +352,35 @@ compute_worst:
 	pushl	%ebp
 	movl	%esp, %ebp
 
-	movq	student1, %mm0
-	pcmpgtb	student2, %mm0	# Which is compared as being greater?
-	movq	student1, %mm1
-	pand	%mm0, %mm1	# This and statement below may be reversed, need to
-	pandn	student2, %mm0	#    check logic of this process, see above comment
+	pushl	%ecx
+
+	movl	$0, %ecx
+cwmmx:
+	movq	student1(,%ecx,8), %mm0
+	pcmpgtb	student2(,%ecx,8), %mm0	# Which is compared as being greater?
+	movq	student1(,%ecx,8), %mm1
+	pandn	%mm0, %mm1	# This and statement below may be reversed, need to
+	pand	student2(,%ecx,8), %mm0	#    check logic of this process, see above comment
 	paddb	%mm1, %mm0	# Should combine both, since either a value or zero
-	movq	%mm0, worstgrades
+
+	movq	%mm0, %mm2
+	pcmpgtb	student3(,%ecx,8), %mm2	# Which is compared as being greater?
+	pandn	%mm2, %mm0	# This and statement below may be reversed, need to
+	pand	student3(,%ecx,8), %mm2	#    check logic of this process, see above comment
+	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
+
+	movq	%mm0, %mm2
+	pcmpgtb	student4(,%ecx,8), %mm2	# Which is compared as being greater?
+	pandn	%mm2, %mm0	# This and statement below may be reversed, need to
+	pand	student4(,%ecx,8), %mm2	#    check logic of this process, see above comment
+	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
+
+	movq	%mm0, worstgrades(,%ecx,8)
+	cmpl	$0, %ecx
+	incl	%ecx
+	je	cwmmx
+
+	popl	%ecx
 
 	leave
 	ret
@@ -374,12 +395,89 @@ compute_best:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushl	%ecx
 
+	movl	$0, %ecx
+cbmmx:
+	movq	student1(,%ecx,8), %mm0
+	pcmpgtb	student2(,%ecx,8), %mm0	# Which is compared as being greater?
+	movq	student1(,%ecx,8), %mm1
+	pand	%mm0, %mm1	# This and statement below may be reversed, need to
+	pandn	student2(,%ecx,8), %mm0	#    check logic of this process, see above comment
+	paddb	%mm1, %mm0	# Should combine both, since either a value or zero
+
+	movq	%mm0, %mm2
+	pcmpgtb	student3(,%ecx,8), %mm2	# Which is compared as being greater?
+	pand	%mm2, %mm0	# This and statement below may be reversed, need to
+	pandn	student3(,%ecx,8), %mm2	#    check logic of this process, see above comment
+	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
+
+	movq	%mm0, %mm2
+	pcmpgtb	student4(,%ecx,8), %mm2	# Which is compared as being greater?
+	pand	%mm2, %mm0	# This and statement below may be reversed, need to
+	pandn	student4(,%ecx,8), %mm2	#    check logic of this process, see above comment
+	paddb	%mm2, %mm0	# Should combine both, since either a value or zero
+
+	movq	%mm0, worstgrades(,%ecx,8)
+	cmpl	$0, %ecx
+	incl	%ecx
+	je	cwmmx
+
+	popl	%ecx
 
 	leave
 	ret
 	.size	compute_best, .-compute_best
 # --- end get_prj_avg ---
+
+
+
+# ===== PRINT_GRADES =====
+# Print all individual grades for a given student
+# @args Starting memory address for the student's grades
+	.type	get_prj_avg, @function
+print_grades:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+
+	movl	$16, %ecx
+	movl	$0, %eax
+	movl	8(%ebp), %ebx
+
+prntgrades:
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	pushl	(%ebx, %eax, 4)
+	pushl	$floatstr
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+	incl	%eax
+	loop	prntgrades
+
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+
+	leave
+	ret
+	.size	print_grades, .-print_grades
+# --- end print_gradesg ---
 
 
 
