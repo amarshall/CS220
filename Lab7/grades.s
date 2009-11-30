@@ -10,6 +10,7 @@ bestgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 temp:		.byte	0
 templ:		.long	0
+tempf:		.float	0
 
 # --- end variable memory defs ---
 
@@ -30,27 +31,54 @@ glblmult:	.float	.30, .30, .20, .20
 
 #			 A,A-,B+, B,B-,C+, C,C+, D,0
 thresholds:	.int	93,90,87,83,80,77,73,70,65,0
-gradeA:		.string	"A"
+gradeA:		.string	"A ("
 		.size gradeA, .-gradeA
-gradeAm:	.string	"A-"
+gradeAm:	.string	"A- ("
 		.size gradeAm, .-gradeAm
-gradeBp:	.string	"B+"
+gradeBp:	.string	"B+ ("
 		.size gradeBp, .-gradeBp
-gradeB:		.string	"B"
+gradeB:		.string	"B ("
 		.size gradeB, .-gradeB
-gradeBm:	.string	"B-"
+gradeBm:	.string	"B- ("
 		.size gradeBm, .-gradeBm
-gradeCp:	.string	"C+"
+gradeCp:	.string	"C+ ("
 		.size gradeCp, .-gradeCp
-gradeC:		.string	"C"
+gradeC:		.string	"C ("
 		.size gradeC, .-gradeC
-gradeCm:	.string	"C-"
+gradeCm:	.string	"C- ("
 		.size gradeCm, .-gradeCm
-gradeD:		.string	"D"
+gradeD:		.string	"D ("
 		.size gradeD, .-gradeD
+gradeF:		.string	"F ("
+		.size gradeF, .-gradeF
+
+student1str:	.string	"\n\n### STUDENT 1 ###\n"
+		.size student1, .-student1
+student2str:	.string	"\n\n### STUDENT 2 ###\n"
+		.size student2, .-student2
+student3str:	.string	"\n\n### STUDENT 3 ###\n"
+		.size student3, .-student3
+student4str:	.string	"\n\n### STUDENT 4 ###\n"
+		.size student4, .-student4
+student5str:	.string	"\n\n### STUDENT 5 (WORST) ###\n"
+		.size student4, .-student4
+student6str:	.string	"\n\n### STUDENT 6 (BEST) ###\n"
+		.size student4, .-student4
 
 
-floatstr:	.string	"%.2f\n"
+quizstr:	.string "Quizzes (1-7):\n"
+		.size quizstr, .-quizstr
+labstr:		.string "Labs (1-7):\n"
+		.size labstr, .-labstr
+midstr:		.string "Midterm: "
+		.size midstr, .-midstr
+finstr:		.string "Final Project: "
+		.size finstr, .-finstr
+fingrstr:	.string "Final Grade: "
+		.size fingrstr, .-fingrstr
+
+
+floatstr:	.string	"%.2f\%)\n"
 		.size floatstr, .-floatstr
 decstr:		.string	"%hhd\n"
 		.size decstr, .-decstr
@@ -72,8 +100,16 @@ main:
 	
 	
 	# Compute & print student one
+	pushl	$student1str
+	call	print_string
+	popl	%ebx
 	pushl	$student1
+	call	print_grades
 	call	compute_grade
+	pushl	$fingrstr
+	call	print_string
+	popl	%ebx
+	call	get_letter
 	popl	%ebx
 
 	pushf
@@ -97,8 +133,16 @@ main:
 	
 	
 	# Compute & print student two
+	pushl	$student2str
+	call	print_string
+	popl	%ebx
 	pushl	$student2
+	call	print_grades
 	call	compute_grade
+	pushl	$fingrstr
+	call	print_string
+	popl	%ebx
+	call	get_letter
 	popl	%ebx
 
 	pushf
@@ -122,8 +166,16 @@ main:
 	
 	
 	# Compute & print student three
+	pushl	$student3str
+	call	print_string
+	popl	%ebx
 	pushl	$student3
+	call	print_grades
 	call	compute_grade
+	pushl	$fingrstr
+	call	print_string
+	popl	%ebx
+	call	get_letter
 	popl	%ebx
 
 	pushf
@@ -147,8 +199,16 @@ main:
 	
 	
 	# Compute & print student four
+	pushl	$student4str
+	call	print_string
+	popl	%ebx
 	pushl	$student4
+	call	print_grades
 	call	compute_grade
+	pushl	$fingrstr
+	call	print_string
+	popl	%ebx
+	call	get_letter
 	popl	%ebx
 
 	pushf
@@ -173,12 +233,16 @@ main:
 
 	# Compute & print student "five" (worst)
 	call	compute_worst
-	pushl	$worstgrades
-	call	compute_grade
+	pushl	$student5str
+	call	print_string
 	popl	%ebx
-
 	pushl	$worstgrades
 	call	print_grades
+	call	compute_grade
+	pushl	$fingrstr
+	call	print_string
+	popl	%ebx
+	call	get_letter
 	popl	%ebx
 
 	pushf
@@ -202,8 +266,16 @@ main:
 
 	# Compute & print student "six" (best)
 	call	compute_best
+	pushl	$student6str
+	call	print_string
+	popl	%ebx
 	pushl	$bestgrades
+	call	print_grades
 	call	compute_grade
+	pushl	$fingrstr
+	call	print_string
+	popl	%ebx
+	call	get_letter
 	popl	%ebx
 
 
@@ -370,7 +442,7 @@ add_prj:
 
 
 # ===== COMPUTE_WORST =====
-	.type	get_prj_avg, @function
+	.type	compute_worst, @function
 compute_worst:
 	pushl	%ebp
 	movl	%esp, %ebp
@@ -418,7 +490,7 @@ cwmmx:
 
 
 # ===== COMPUTE_BEST =====
-	.type	get_prj_avg, @function
+	.type	compute_best, @function
 compute_best:
 	pushl	%ebp
 	movl	%esp, %ebp
@@ -463,14 +535,110 @@ cbmmx:
 
 # ===== GET_LETTER =====
 # @args	The floating point grade in %st(0)
-# @returns	Char for letter in %eax
-	.type	get_prj_avg, @function
+# @returns The original argument in %st(0)
+	.type	get_letter, @function
 get_letter:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	movl	$0, %esi
+
 	filds	thresholds(,%esi,4)
-#	fcomi	%ebx
+	fcomi	%st(1)
+	ja	let1
+	pushl	$gradeA
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+	
+let1:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let2
+	pushl	$gradeAm
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let2:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let3
+	pushl	$gradeBp
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let3:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let4
+	pushl	$gradeB
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let4:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let5
+	pushl	$gradeBm
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let5:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let6
+	pushl	$gradeCp
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let6:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let7
+	pushl	$gradeC
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let7:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let8
+	pushl	$gradeCm
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let8:	fstps	tempf
+	incl	%esi
+	filds	thresholds(,%esi,4)
+	fcomi	%st(1)
+	ja	let9
+	pushl	$gradeD
+	call	print_string
+	popl	%ebx
+	jmp	letdone
+
+let9:	fstps	tempf
+	pushl	$gradeF
+	call	print_string
+	popl	%ebx
+
+letdone:
+
+	fstps	tempf
 
 	leave
 	ret
@@ -480,10 +648,74 @@ get_letter:
 
 
 # ===== PRINT_GRADES =====
-# Print all individual grades for a given student
-# @args Starting memory address for the student's grades
-	.type	get_prj_avg, @function
+# @args	The floating point grade in %st(0)
+# @returns	Char for letter in %eax
+	.type	print_grades, @function
 print_grades:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+	pushl	%eax
+	pushl	%ebx
+
+	movl	8(%ebp), %ebx
+
+	# Print quizzes
+	pushl	$quizstr
+	call	print_string
+	popl	%eax
+	pushl	$7
+	pushl	%ebx
+	call	print_grades_helper
+	popl	%eax
+	popl	%eax
+
+	# Print labs
+	addl	$7, %ebx
+	pushl	$labstr
+	call	print_string
+	popl	%eax
+	pushl	$7
+	pushl	%ebx
+	call	print_grades_helper
+	popl	%eax
+	popl	%eax
+
+	# Print midterm
+	addl	$7, %ebx
+	pushl	$midstr
+	call	print_string
+	popl	%eax
+	pushl	$1
+	pushl	%ebx
+	call	print_grades_helper
+	popl	%eax
+	popl	%eax
+
+	# Print final project
+	incl	%ebx
+	pushl	$finstr
+	call	print_string
+	popl	%eax
+	pushl	$1
+	pushl	%ebx
+	call	print_grades_helper
+	popl	%eax
+	popl	%eax
+
+	popl	%ebx
+	popl	%eax
+
+	leave
+	ret
+	.size	print_grades, .-print_grades
+# --- end print_grades ---
+
+
+
+# ===== PRINT_GRADES_HELPER =====
+	.type	print_grades_helper, @function
+print_grades_helper:
 	pushl	%ebp
 	movl	%esp, %ebp
 
@@ -491,7 +723,7 @@ print_grades:
 	pushl	%ebx
 	pushl	%ecx
 
-	movl	$16, %ecx
+	movl	12(%ebp), %ecx
 	movl	8(%ebp), %ebx
 
 prntgrades:
@@ -523,8 +755,40 @@ prntgrades:
 
 	leave
 	ret
-	.size	print_grades, .-print_grades
-# --- end print_grades ---
+	.size	print_grades_helper, .-print_grades_helper
+# --- end print_grades_helper ---
+
+
+
+# ===== PRINT_STRING =====
+# Prints a single string from passed memory location
+	.type	print_string, @function
+print_string:
+	pushl	%ebp
+	movl	%esp, %ebp
+
+	pushf
+	pushl	%eax
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl	%esi
+	pushl	%edi
+	pushl	8(%ebp)
+	call	printf
+	popl	%ebx
+	popl	%edi
+	popl	%esi
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
+
+	leave
+	ret
+	.size	print_string, .-print_string
+# --- end print_string ---
 
 
 
