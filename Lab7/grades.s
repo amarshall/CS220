@@ -29,6 +29,8 @@ student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
 prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
 glblmult:	.float	.30, .30, .20, .20
 
+zerocmp:	.byte	0,0,0,0,0,0,0,0
+
 #			 A,A-,B+, B,B-,C+, C,C+, D,0
 thresholds:	.int	93,90,87,83,80,77,73,70,65,0
 gradeA:		.string	"A ("
@@ -68,20 +70,20 @@ student6str:	.string	"\n\n### STUDENT 6 (BEST) ###\n"
 
 quizstr:	.string "Quizzes (1-7):\n"
 		.size quizstr, .-quizstr
-labstr:		.string "Labs (1-7):\n"
+labstr:		.string "\nLabs (1-7):\n"
 		.size labstr, .-labstr
-midstr:		.string "Midterm: "
+midstr:		.string "\nMidterm: "
 		.size midstr, .-midstr
 finstr:		.string "Final Project: "
 		.size finstr, .-finstr
-fingrstr:	.string "Final Grade: "
+fingrstr:	.string "\nFinal Grade: "
 		.size fingrstr, .-fingrstr
 
 
 floatstr:	.string	"%.2f\%)\n"
 		.size floatstr, .-floatstr
-decstr:		.string	"%hhd\n"
-		.size decstr, .-decstr
+decstr:		.string	"%hhd\n"	# Treats input as a byte, no need for crazy
+		.size decstr, .-decstr	#   register extending
 
 # --- end read-only memory defs ---
 
@@ -119,8 +121,8 @@ main:
 	pushl	%edx
 	pushl	%esi
 	pushl	%edi
-	fstpl	(%esp)
-	pushl	$floatstr
+	fstpl	(%esp)		# For some reason storing in memory and pushing the
+	pushl	$floatstr	#   address doesn't work
 	call	printf
 	popl	%ebx
 	popl	%edi
@@ -232,7 +234,13 @@ main:
 
 
 	# Compute & print student "five" (worst)
+	pushl	$16
+	pushl	$student1
+	pushl	$worstgrades
 	call	compute_worst
+	popl	%ebx
+	popl	%ebx
+	popl	%ebx
 	pushl	$student5str
 	call	print_string
 	popl	%ebx
@@ -265,7 +273,13 @@ main:
 	popf
 
 	# Compute & print student "six" (best)
+	pushl	$16
+	pushl	$student1
+	pushl	$bestgrades
 	call	compute_best
+	popl	%ebx
+	popl	%ebx
+	popl	%ebx
 	pushl	$student6str
 	call	print_string
 	popl	%ebx
@@ -307,12 +321,13 @@ main:
 
 
 # ===== COMPUTE_GRADE =====
-# @returns Result in %st
+# @returns Result in %st(0) 
 	.type	compute_grade, @function
 compute_grade:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
 	pushl	%eax
 	pushl	%ebx
 	pushl	%ecx
@@ -355,6 +370,7 @@ compute_grade:
 	popl	%ecx
 	popl	%ebx
 	popl	%eax
+	popf
 
 	leave
 	ret
@@ -369,6 +385,7 @@ get_quiz_avg:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
 	pushl	%eax
 	pushl	%ebx
 	pushl	%ecx
@@ -393,6 +410,7 @@ add_quiz:
 	popl	%ecx
 	popl	%ebx
 	popl	%eax
+	popf
 
 	leave
 	ret
@@ -408,6 +426,7 @@ get_prj_avg:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
 	pushl	%eax
 	pushl	%ebx
 	pushl	%ecx
@@ -433,6 +452,7 @@ add_prj:
 	popl	%ecx
 	popl	%ebx
 	popl	%eax
+	popf
 
 	leave
 	ret
@@ -447,40 +467,57 @@ compute_worst:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
+	pushl	%eax
+	pushl	%ebx
 	pushl	%ecx
+	pushl	%edx
+	
+	movl	8(%ebp), %eax	# Destination
+	movl	12(%ebp), %ebx	# Start address
+	movl	16(%ebp), %edx	# Number of grades
 
 	movl	$-1, %ecx
 cwmmx:
 	incl	%ecx
-	movq	student1(,%ecx,8), %mm0
-	pcmpgtb	student2(,%ecx,8), %mm0
-	movq	student1(,%ecx,8), %mm1
+	movl	%ebx, %esi
+	addl	%edx, %esi
+	movq	(%ebx,%ecx,8), %mm0
+	pcmpgtb	(%esi,%ecx,8), %mm0
+	movq	(%ebx,%ecx,8), %mm1
 	movq	%mm0, %mm2
 	pandn	%mm1, %mm0
-	pand	student2(,%ecx,8), %mm2
+	pand	(%esi,%ecx,8), %mm2
 	paddb	%mm2, %mm0
 
 	movq	%mm0, %mm2
-	pcmpgtb	student3(,%ecx,8), %mm2
+	addl	%edx, %esi
+	pcmpgtb	(%esi,%ecx,8), %mm2
 	movq	%mm2, %mm1
 	pandn	%mm0, %mm2
-	pand	student3(,%ecx,8), %mm1
+	pand	(%esi,%ecx,8), %mm1
 	paddb	%mm2, %mm1
 	movq	%mm1, %mm0
 
 	movq	%mm0, %mm2
-	pcmpgtb	student4(,%ecx,8), %mm2
+	addl	%edx, %esi
+	pcmpgtb	(%esi,%ecx,8), %mm2
 	movq	%mm2, %mm1
 	pandn	%mm0, %mm2
-	pand	student4(,%ecx,8), %mm1
+	pand	(%esi,%ecx,8), %mm1
 	paddb	%mm2, %mm1
+	
 
-	movq	%mm1, worstgrades(,%ecx,8)
+	movq	%mm1, (%eax ,%ecx,8)
 	cmp	$0, %ecx
 	je	cwmmx
 
-	popl	%ecx
 	emms
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
 
 	leave
 	ret
@@ -495,36 +532,52 @@ compute_best:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
+	pushl	%eax
+	pushl	%ebx
 	pushl	%ecx
+	pushl	%edx
+	
+	movl	8(%ebp), %eax	# Destination
+	movl	12(%ebp), %ebx	# Start address
+	movl	16(%ebp), %edx	# Number of grades
 
 	movl	$-1, %ecx
 cbmmx:
 	incl	%ecx
-	movq	student1(,%ecx,8), %mm0
-	pcmpgtb	student2(,%ecx,8), %mm0
-	movq	student1(,%ecx,8), %mm1
+	movl	%ebx, %esi
+	addl	%edx, %esi
+	movq	(%ebx,%ecx,8), %mm0
+	pcmpgtb	(%esi,%ecx,8), %mm0
+	movq	(%ebx,%ecx,8), %mm1
 	pand	%mm0, %mm1
-	pandn	student2(,%ecx,8), %mm0
+	pandn	(%esi,%ecx,8), %mm0
 	paddb	%mm1, %mm0
 
 	movq	%mm0, %mm2
-	pcmpgtb	student3(,%ecx,8), %mm2
+	addl	%edx, %esi
+	pcmpgtb	(%esi,%ecx,8), %mm2
 	pand	%mm2, %mm0
-	pandn	student3(,%ecx,8), %mm2
+	pandn	(%esi,%ecx,8), %mm2
 	paddb	%mm2, %mm0
 
 	movq	%mm0, %mm2
-	pcmpgtb	student4(,%ecx,8), %mm2
+	addl	%edx, %esi
+	pcmpgtb	(%esi,%ecx,8), %mm2
 	pand	%mm2, %mm0
-	pandn	student4(,%ecx,8), %mm2
+	pandn	(%esi,%ecx,8), %mm2
 	paddb	%mm2, %mm0
 
-	movq	%mm0, bestgrades(,%ecx,8)
+	movq	%mm0, (%eax,%ecx,8)
 	cmp	$0, %ecx
 	je	cbmmx
 
-	popl	%ecx
 	emms
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	popl	%eax
+	popf
 
 	leave
 	ret
@@ -540,6 +593,10 @@ cbmmx:
 get_letter:
 	pushl	%ebp
 	movl	%esp, %ebp
+
+	pushf
+	pushl	%ebx
+	pushl	%esi
 
 	movl	$0, %esi
 
@@ -639,6 +696,10 @@ let9:	fstps	tempf
 letdone:
 
 	fstps	tempf
+	
+	popl	%esi
+	popl	%ebx
+	popf
 
 	leave
 	ret
@@ -655,6 +716,7 @@ print_grades:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
 	pushl	%eax
 	pushl	%ebx
 
@@ -705,6 +767,7 @@ print_grades:
 
 	popl	%ebx
 	popl	%eax
+	popf
 
 	leave
 	ret
@@ -719,6 +782,7 @@ print_grades_helper:
 	pushl	%ebp
 	movl	%esp, %ebp
 
+	pushf
 	pushl	%eax
 	pushl	%ebx
 	pushl	%ecx
@@ -752,6 +816,7 @@ prntgrades:
 	popl	%ecx
 	popl	%ebx
 	popl	%eax
+	popf
 
 	leave
 	ret
