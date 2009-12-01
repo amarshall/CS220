@@ -1,10 +1,10 @@
-#  CS220 Lab #6
+#  CS220 Lab #7
 #  @author John Andrew Marshall (jmarsha6)
-all: grades
-grades.o: grades.s
-	gcc -Wall -g -c grades.s -o grades.o
-grades: grades.o
-	gcc -Wall -g grades.o -o grades
+all: lab7
+lab7.o: lab7.s
+	gcc -Wall -g -c lab7.s -o lab7.o
+lab7: lab7.o
+	gcc -Wall -g lab7.o -o lab7
 
 
 clean:
