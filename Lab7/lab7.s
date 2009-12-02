@@ -9,7 +9,9 @@ worstgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 bestgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 temp:		.byte	0
-templ:		.long	0
+memsafbuf:	.int	0	# Needed to ensure that when temp is loaded into FPU
+tempi:		.int	0	#   using fiadd that there's no other memory after
+templ:		.long	0	#   since fiadd loads more than a byte
 tempf:		.float	0
 
 # --- end variable memory defs ---
@@ -595,110 +597,94 @@ get_letter:
 	movl	%esp, %ebp
 
 	pushf
+	pushl	%eax
 	pushl	%ebx
 	pushl	%esi
 
 	movl	$0, %esi
+	fists	tempi
+	movl	tempi, %eax
 
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let1
+	cmp	thresholds(,%esi,4), %eax
+	jb	let1
 	pushl	$gradeA
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 	
-let1:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let2
+let1:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let2
 	pushl	$gradeAm
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let2:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let3
+let2:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let3
 	pushl	$gradeBp
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let3:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let4
+let3:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let4
 	pushl	$gradeB
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let4:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let5
+let4:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let5
 	pushl	$gradeBm
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let5:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let6
+let5:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let6
 	pushl	$gradeCp
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let6:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let7
+let6:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let7
 	pushl	$gradeC
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let7:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let8
+let7:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let8
 	pushl	$gradeCm
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let8:	fstps	tempf
-	incl	%esi
-	filds	thresholds(,%esi,4)
-	fcomi	%st(1)
-	ja	let9
+let8:	incl	%esi
+	cmp	thresholds(,%esi,4), %eax
+	jb	let9
 	pushl	$gradeD
 	call	print_string
 	popl	%ebx
 	jmp	letdone
 
-let9:	fstps	tempf
-	pushl	$gradeF
+let9:	pushl	$gradeF
 	call	print_string
 	popl	%ebx
 
 letdone:
 
-	fstps	tempf
-	
 	popl	%esi
 	popl	%ebx
+	popl	%eax
 	popf
 
 	leave
