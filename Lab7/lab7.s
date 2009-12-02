@@ -237,7 +237,7 @@ main:
 
 
 	# Compute & print student "five" (worst)
-	pushl	$16
+	pushl	$64
 	pushl	$student1
 	pushl	$worstgrades
 	call	compute_worst
@@ -276,7 +276,7 @@ main:
 	popf
 
 	# Compute & print student "six" (best)
-	pushl	$16
+	pushl	$64
 	pushl	$student1
 	pushl	$bestgrades
 	call	compute_best
@@ -475,65 +475,61 @@ compute_worst:
 	pushl	%ebx
 	pushl	%ecx
 	pushl	%edx
+	pushl	%edi
+	pushl	%esi
 	
+	movl	$0, %edx
+	movl	16(%ebp), %eax	# Number of grades
+	movl	$16, %ebx
+	divl	%ebx
+	movl	%eax, %edi
+	subl	$2, %edi	# Correct for counter method difference
 	movl	8(%ebp), %eax	# Destination
 	movl	12(%ebp), %ebx	# Start address
-	movl	16(%ebp), %edx	# Number of grades
 
-	movl	$-1, %ecx
+	movl	$-1, %edx
 cwmmx:
-	incl	%ecx
+	incl	%edx
+	movl	%edi, %ecx	# Restore starting counter
 	movl	%ebx, %esi
-	addl	%edx, %esi
-	movq	(%ebx,%ecx,8), %mm0
-	pcmpgtb	(%esi,%ecx,8), %mm0
+	addl	$16, %esi
+	movq	(%ebx,%edx,8), %mm0
+	pcmpgtb	(%esi,%edx,8), %mm0
 	movq	zerocmp, %mm3
 	movq	%mm3, %mm4
-	pcmpeqb (%ebx,%ecx,8), %mm3
-	pcmpeqb (%esi,%ecx,8), %mm4
+	pcmpeqb (%ebx,%edx,8), %mm3
+	pcmpeqb (%esi,%edx,8), %mm4
 	por	%mm0, %mm3
 	pxor	onecmp, %mm0
 	por	%mm0, %mm4
-	pand	(%ebx,%ecx,8), %mm4
-	pand	(%esi,%ecx,8), %mm3
+	pand	(%ebx,%edx,8), %mm4
+	pand	(%esi,%edx,8), %mm3
 	paddb	%mm3, %mm4
 	movq	%mm4, %mm0
-
+wnextstu:
 	movq	%mm0, %mm2
-	addl	%edx, %esi
-	pcmpgtb	(%esi,%ecx,8), %mm2
+	addl	$16, %esi
+	pcmpgtb	(%esi,%edx,8), %mm2
 	movq	zerocmp, %mm3
 	movq	%mm3, %mm4
 	pcmpeqb %mm0, %mm3
-	pcmpeqb (%esi,%ecx,8), %mm4
+	pcmpeqb (%esi,%edx,8), %mm4
 	por	%mm2, %mm3
 	pxor	onecmp, %mm2
 	por	%mm2, %mm4
 	pand	%mm0, %mm4
-	pand	(%esi,%ecx,8), %mm3
+	pand	(%esi,%edx,8), %mm3
 	paddb	%mm3, %mm4
 	movq	%mm4, %mm0
+	loop	wnextstu
 
-	movq	%mm0, %mm2
-	addl	%edx, %esi
-	pcmpgtb	(%esi,%ecx,8), %mm2
-	movq	zerocmp, %mm3
-	movq	%mm3, %mm4
-	pcmpeqb %mm0, %mm3
-	pcmpeqb (%esi,%ecx,8), %mm4
-	por	%mm2, %mm3
-	pxor	onecmp, %mm2
-	por	%mm2, %mm4
-	pand	%mm0, %mm4
-	pand	(%esi,%ecx,8), %mm3
-	paddb	%mm3, %mm4
-	movq	%mm4, %mm0
-
-	movq	%mm0, (%eax ,%ecx,8)
-	cmp	$0, %ecx
+	movq	%mm0, (%eax,%edx,8)
+	cmp	$0, %edx
 	je	cwmmx
 
 	emms
+	popl	%esi
+	popl	%edi
 	popl	%edx
 	popl	%ecx
 	popl	%ebx
@@ -558,42 +554,46 @@ compute_best:
 	pushl	%ebx
 	pushl	%ecx
 	pushl	%edx
+	pushl	%edi
+	pushl	%esi
 	
+	movl	$0, %edx
+	movl	16(%ebp), %eax	# Number of grades
+	movl	$16, %ebx
+	divl	%ebx
+	movl	%eax, %edi
+	subl	$2, %edi	# Correct for counter method difference
 	movl	8(%ebp), %eax	# Destination
 	movl	12(%ebp), %ebx	# Start address
-	movl	16(%ebp), %edx	# Number of grades
 
-	movl	$-1, %ecx
+	movl	$-1, %edx
 cbmmx:
-	incl	%ecx
+	incl	%edx
+	movl	%edi, %ecx	# Restore starting counter
 	movl	%ebx, %esi
-	addl	%edx, %esi
-	movq	(%ebx,%ecx,8), %mm0
-	pcmpgtb	(%esi,%ecx,8), %mm0
-	movq	(%ebx,%ecx,8), %mm1
+	addl	$16, %esi
+	movq	(%ebx,%edx,8), %mm0
+	pcmpgtb	(%esi,%edx,8), %mm0
+	movq	(%ebx,%edx,8), %mm1
 	pand	%mm0, %mm1
-	pandn	(%esi,%ecx,8), %mm0
+	pandn	(%esi,%edx,8), %mm0
 	paddb	%mm1, %mm0
-
+bnextstu:
 	movq	%mm0, %mm2
-	addl	%edx, %esi
-	pcmpgtb	(%esi,%ecx,8), %mm2
+	addl	$16, %esi
+	pcmpgtb	(%esi,%edx,8), %mm2
 	pand	%mm2, %mm0
-	pandn	(%esi,%ecx,8), %mm2
+	pandn	(%esi,%edx,8), %mm2
 	paddb	%mm2, %mm0
+	loop	bnextstu
 
-	movq	%mm0, %mm2
-	addl	%edx, %esi
-	pcmpgtb	(%esi,%ecx,8), %mm2
-	pand	%mm2, %mm0
-	pandn	(%esi,%ecx,8), %mm2
-	paddb	%mm2, %mm0
-
-	movq	%mm0, (%eax,%ecx,8)
-	cmp	$0, %ecx
+	movq	%mm0, (%eax,%edx,8)
+	cmp	$0, %edx
 	je	cbmmx
 
 	emms
+	popl	%esi
+	popl	%edi
 	popl	%edx
 	popl	%ecx
 	popl	%ebx
