@@ -32,6 +32,7 @@ prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
 glblmult:	.float	.30, .30, .20, .20
 
 zerocmp:	.byte	0,0,0,0,0,0,0,0
+onecmp:		.byte	0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
 
 #			 A,A-,B+, B,B-,C+, C,C+, D,0
 thresholds:	.int	9300,9000,8700,8300,8000,7700,7300,7000,6500,0
@@ -491,9 +492,9 @@ cwmmx:
 	pcmpeqb (%ebx,%ecx,8), %mm3
 	pcmpeqb (%esi,%ecx,8), %mm4
 	por	%mm0, %mm3
+	pxor	onecmp, %mm0
 	por	%mm0, %mm4
-	movq	(%ebx,%ecx,8), %mm1
-	pandn	%mm1, %mm4
+	pand	(%ebx,%ecx,8), %mm4
 	pand	(%esi,%ecx,8), %mm3
 	paddb	%mm3, %mm4
 	movq	%mm4, %mm0
@@ -501,11 +502,14 @@ cwmmx:
 	movq	%mm0, %mm2
 	addl	%edx, %esi
 	pcmpgtb	(%esi,%ecx,8), %mm2
+	movq	zerocmp, %mm3
+	movq	%mm3, %mm4
 	pcmpeqb %mm0, %mm3
 	pcmpeqb (%esi,%ecx,8), %mm4
 	por	%mm2, %mm3
+	pxor	onecmp, %mm2
 	por	%mm2, %mm4
-	pandn	%mm0, %mm4
+	pand	%mm0, %mm4
 	pand	(%esi,%ecx,8), %mm3
 	paddb	%mm3, %mm4
 	movq	%mm4, %mm0
@@ -513,11 +517,14 @@ cwmmx:
 	movq	%mm0, %mm2
 	addl	%edx, %esi
 	pcmpgtb	(%esi,%ecx,8), %mm2
+	movq	zerocmp, %mm3
+	movq	%mm3, %mm4
 	pcmpeqb %mm0, %mm3
 	pcmpeqb (%esi,%ecx,8), %mm4
 	por	%mm2, %mm3
+	pxor	onecmp, %mm2
 	por	%mm2, %mm4
-	pandn	%mm0, %mm4
+	pand	%mm0, %mm4
 	pand	(%esi,%ecx,8), %mm3
 	paddb	%mm3, %mm4
 	movq	%mm4, %mm0
