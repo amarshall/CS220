@@ -11,7 +11,7 @@ bestgrades:	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 temp:		.byte	0
 memsafbuf:	.int	0	# Needed to ensure that when temp is loaded into FPU
 tempi:		.int	0	#   using fiadd that there's no other memory after
-templ:		.long	0	#   since fiadd loads more than a byte
+templ:		.long	0	#   since fiadd apparently loads more than a byte
 tempf:		.float	0
 
 # --- end variable memory defs ---
@@ -21,12 +21,12 @@ tempf:		.float	0
 # ===== READ-ONLY MEMORY DEFS =====
 	.section	.rodata
 
-#	Format:		Quizzes              Projects             Mid/Fin
-#			 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, M, F
-student1:	.byte	90,60,100,70,50,0,90,100,98,80,100,90,86,100,86,98
-student2:	.byte	75,80,90,75,90,85,80,100,95,100,100,95,35,85,69,89
-student3:	.byte	80,90,50,80,80,85,60,100,100,95,100,98,75,95,93,90
-student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
+#	Format:		Quizzes                  Projects                 Mid/Fin
+#			 1, 2,  3,  4, 5,  6, 7,  1,  2,  3, 4,  5, 6,  7, M, F
+student1:	.byte	90,60,100, 70,50,  0,90,100, 98, 80,100,90,86,100,86,98
+student2:	.byte	75,80, 90, 75,90, 85,80,100, 95,100,100,95,35, 85,69,89
+student3:	.byte	80,90, 50, 80,80, 85,60,100,100, 95,100,98,75, 95,93,90
+student4:	.byte	85,90, 75,100,75,100,75,  0, 80, 75, 95,98,80, 98,78,95
 
 prjmult:	.float	.01, .04, .15, .20, .15, .20, .25
 glblmult:	.float	.30, .30, .20, .20
@@ -34,8 +34,10 @@ glblmult:	.float	.30, .30, .20, .20
 zerocmp:	.byte	0,0,0,0,0,0,0,0
 onecmp:		.byte	0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
 
-#			 A,A-,B+, B,B-,C+, C,C+, D,0
+# Thresholds are *100 for two-decimals of precision when comparing
+#			 A,    A-,  B+,   B,  B-,  C+,   C,  C+,   D,0
 thresholds:	.int	9300,9000,8700,8300,8000,7700,7300,7000,6500,0
+
 gradeA:		.string	"A ("
 		.size gradeA, .-gradeA
 gradeAm:	.string	"A- ("
@@ -81,7 +83,6 @@ finstr:		.string "Final Project: "
 		.size finstr, .-finstr
 fingrstr:	.string "\nFinal Grade: "
 		.size fingrstr, .-fingrstr
-
 
 floatstr:	.string	"%.2f\%)\n"
 		.size floatstr, .-floatstr
@@ -324,6 +325,7 @@ main:
 
 
 # ===== COMPUTE_GRADE =====
+# @args Memory location of student to compute grade for
 # @returns Result in %st(0) 
 	.type	compute_grade, @function
 compute_grade:
@@ -382,6 +384,7 @@ compute_grade:
 
 
 # ===== GET_QUIZ_AVG =====
+# @args Memory location of student to compute quiz grade for
 # @returns Result in %st
 	.type	get_quiz_avg, @function
 get_quiz_avg:
@@ -423,6 +426,7 @@ add_quiz:
 
 
 # ===== GET_PRJ_AVG =====
+# @args Memory location of student to compute project/lab grade for
 # @returns Result in %st
 	.type	get_prj_avg, @function
 get_prj_avg:
@@ -488,23 +492,23 @@ compute_worst:
 	movl	12(%ebp), %ebx	# Start address
 
 	movl	$-1, %edx
-cwmmx:
+wnextchnk:
 	incl	%edx
 	movl	%edi, %ecx	# Restore starting counter
-	movl	%ebx, %esi
-	addl	$16, %esi
+	movl	%ebx, %esi	# Restore starting memory location
+	addl	$16, %esi	# %esi holds memory location of next student
 	movq	(%ebx,%edx,8), %mm0
-	pcmpgtb	(%esi,%edx,8), %mm0
+	pcmpgtb	(%esi,%edx,8), %mm0	# Get greater-than mask
 	movq	zerocmp, %mm3
 	movq	%mm3, %mm4
-	pcmpeqb (%ebx,%edx,8), %mm3
-	pcmpeqb (%esi,%edx,8), %mm4
-	por	%mm0, %mm3
-	pxor	onecmp, %mm0
-	por	%mm0, %mm4
-	pand	(%ebx,%edx,8), %mm4
+	pcmpeqb (%ebx,%edx,8), %mm3	# Get first zero mask
+	pcmpeqb (%esi,%edx,8), %mm4	# Get second zero mask
+	por	%mm0, %mm3		# Correct second GT mask for zeroes
+	pxor	onecmp, %mm0		# Need to NOT GT mask before ORing w/zero mask
+	por	%mm0, %mm4		# Correct first GT mask for zeroes
+	pand	(%ebx,%edx,8), %mm4	# Apply the masks
 	pand	(%esi,%edx,8), %mm3
-	paddb	%mm3, %mm4
+	paddb	%mm3, %mm4		# Combine masked results
 	movq	%mm4, %mm0
 wnextstu:
 	movq	%mm0, %mm2
@@ -524,8 +528,8 @@ wnextstu:
 	loop	wnextstu
 
 	movq	%mm0, (%eax,%edx,8)
-	cmp	$0, %edx
-	je	cwmmx
+	cmp	$0, %edx	# If there are more chunks, repeat
+	je	wnextchnk
 
 	emms
 	popl	%esi
@@ -567,7 +571,7 @@ compute_best:
 	movl	12(%ebp), %ebx	# Start address
 
 	movl	$-1, %edx
-cbmmx:
+bnextchnk:
 	incl	%edx
 	movl	%edi, %ecx	# Restore starting counter
 	movl	%ebx, %esi
@@ -589,7 +593,7 @@ bnextstu:
 
 	movq	%mm0, (%eax,%edx,8)
 	cmp	$0, %edx
-	je	cbmmx
+	je	bnextchnk
 
 	emms
 	popl	%esi
@@ -622,7 +626,7 @@ get_letter:
 
 	movl	$0, %esi
 	movl	$100, tempi
-	fimuls	tempi
+	fimuls	tempi	# Multiply by 100 to retain precision to the hundredth
 	fists	tempi
 	movl	tempi, %eax
 
@@ -703,7 +707,7 @@ let9:	pushl	$gradeF
 
 letdone:
 	movl	$100, tempi
-	fidivs	tempi
+	fidivs	tempi	# Correct back GPA in FPU
 
 	popl	%esi
 	popl	%ebx
@@ -786,13 +790,15 @@ print_grades:
 
 
 # ===== PRINT_GRADES_HELPER =====
+# Shouldn't be called by anything other than print_grades
+# @args Starting memory location (of byte array)
+#	Number of items in byte array to print
 	.type	print_grades_helper, @function
 print_grades_helper:
 	pushl	%ebp
 	movl	%esp, %ebp
 
 	pushf
-	pushl	%eax
 	pushl	%ebx
 	pushl	%ecx
 
@@ -824,7 +830,6 @@ prntgrades:
 
 	popl	%ecx
 	popl	%ebx
-	popl	%eax
 	popf
 
 	leave
@@ -835,7 +840,7 @@ prntgrades:
 
 
 # ===== PRINT_STRING =====
-# Prints a single string from passed memory location
+# @args Memory location of string to print
 	.type	print_string, @function
 print_string:
 	pushl	%ebp
@@ -869,4 +874,3 @@ print_string:
 # !!!!! DO NOT MODIFY BELOW !!!!!
 	.section	.note.GNU-stack,"",@progbits
 	.ident	"GCC: (GNU) 3.3.5"
-
