@@ -34,7 +34,7 @@ glblmult:	.float	.30, .30, .20, .20
 zerocmp:	.byte	0,0,0,0,0,0,0,0
 
 #			 A,A-,B+, B,B-,C+, C,C+, D,0
-thresholds:	.int	93,90,87,83,80,77,73,70,65,0
+thresholds:	.int	9300,9000,8700,8300,8000,7700,7300,7000,6500,0
 gradeA:		.string	"A ("
 		.size gradeA, .-gradeA
 gradeAm:	.string	"A- ("
@@ -602,6 +602,8 @@ get_letter:
 	pushl	%esi
 
 	movl	$0, %esi
+	movl	$100, tempi
+	fimuls	tempi
 	fists	tempi
 	movl	tempi, %eax
 
@@ -681,6 +683,8 @@ let9:	pushl	$gradeF
 	popl	%ebx
 
 letdone:
+	movl	$100, tempi
+	fidivs	tempi
 
 	popl	%esi
 	popl	%ebx
