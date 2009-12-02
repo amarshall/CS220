@@ -23,7 +23,7 @@ tempf:		.float	0
 
 #	Format:		Quizzes              Projects             Mid/Fin
 #			 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, M, F
-student1:	.byte	90,60,100,70,50,90,90,100,98,80,100,90,86,100,86,98
+student1:	.byte	90,60,100,70,50,0,90,100,98,80,100,90,86,100,86,98
 student2:	.byte	75,80,90,75,90,85,80,100,95,100,100,95,35,85,69,89
 student3:	.byte	80,90,50,80,80,85,60,100,100,95,100,98,75,95,93,90
 student4:	.byte	85,90,75,100,75,100,75,0,80,75,95,98,80,98,78,95
@@ -486,31 +486,43 @@ cwmmx:
 	addl	%edx, %esi
 	movq	(%ebx,%ecx,8), %mm0
 	pcmpgtb	(%esi,%ecx,8), %mm0
+	movq	zerocmp, %mm3
+	movq	%mm3, %mm4
+	pcmpeqb (%ebx,%ecx,8), %mm3
+	pcmpeqb (%esi,%ecx,8), %mm4
+	por	%mm0, %mm3
+	por	%mm0, %mm4
 	movq	(%ebx,%ecx,8), %mm1
-	movq	%mm0, %mm2
-	pandn	%mm1, %mm0
-	pand	(%esi,%ecx,8), %mm2
-	paddb	%mm2, %mm0
+	pandn	%mm1, %mm4
+	pand	(%esi,%ecx,8), %mm3
+	paddb	%mm3, %mm4
+	movq	%mm4, %mm0
 
 	movq	%mm0, %mm2
 	addl	%edx, %esi
 	pcmpgtb	(%esi,%ecx,8), %mm2
-	movq	%mm2, %mm1
-	pandn	%mm0, %mm2
-	pand	(%esi,%ecx,8), %mm1
-	paddb	%mm2, %mm1
-	movq	%mm1, %mm0
+	pcmpeqb %mm0, %mm3
+	pcmpeqb (%esi,%ecx,8), %mm4
+	por	%mm2, %mm3
+	por	%mm2, %mm4
+	pandn	%mm0, %mm4
+	pand	(%esi,%ecx,8), %mm3
+	paddb	%mm3, %mm4
+	movq	%mm4, %mm0
 
 	movq	%mm0, %mm2
 	addl	%edx, %esi
 	pcmpgtb	(%esi,%ecx,8), %mm2
-	movq	%mm2, %mm1
-	pandn	%mm0, %mm2
-	pand	(%esi,%ecx,8), %mm1
-	paddb	%mm2, %mm1
-	
+	pcmpeqb %mm0, %mm3
+	pcmpeqb (%esi,%ecx,8), %mm4
+	por	%mm2, %mm3
+	por	%mm2, %mm4
+	pandn	%mm0, %mm4
+	pand	(%esi,%ecx,8), %mm3
+	paddb	%mm3, %mm4
+	movq	%mm4, %mm0
 
-	movq	%mm1, (%eax ,%ecx,8)
+	movq	%mm0, (%eax ,%ecx,8)
 	cmp	$0, %ecx
 	je	cwmmx
 
