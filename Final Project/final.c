@@ -1,10 +1,27 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 
+// C++ is so much better...
 #define bool int
 #define true 1
 #define false 0
+
+bool bubbleSortHelper(int i, char *list, bool swapped) {
+	char *var1 = &list[i];
+	char *var2 = &list[i+1];
+	__asm__(
+		"movb (%%ebx), %%dl\n\t"
+		"cmpb %%dl, (%%ecx)\n\t"
+		"jle noswap\n\t"
+		"movl $1, %%eax\n\t"
+		"xchgb %%dl, (%%ecx)\n\t"
+		"movb %%dl, (%%ebx)\n"
+		"noswap:\n\t"
+		:"=a" (swapped)
+		:"b" (var1), "c" (var2)
+	);
+	return swapped;
+}
 
 char* bubbleSort(char * list, int size) {
 	bool swapped = false;
@@ -12,32 +29,50 @@ char* bubbleSort(char * list, int size) {
 		swapped = false;
 		int i;
 		for(i = 0; i<size-2; i++) {
-			int var1 = 0;
-			__asm__(
-				"movl $0, %3\n\t"
-				"movl (%1,%0), %2\n\t"
-				"incl %0\n\t"
-				"cmp %2, (%1,%0)\n\t"
-				"jg noswap\n\t"
-				"movl $1, %3\n\t"
-				"xchg %2, (%1,%0)\n\t"
-				"decl %0\n\t"
-				"movl %2, (%1,%0)\n"
-				"noswap:\n\t"
-				:"=r" (i), "=r" (list), "=r" (var1)
-				:"r" (swapped)
-			);
+			printf("%d\n", c);
+			swapped = bubbleSortHelper(i, list, swapped);
+		}
+		if(!swapped) break;
+		
+		for(i = size-2; i >= 0; i--) {
+			printf("%d\n", c);
+			swapped = bubbleSortHelper(i, list, swapped);
 		}
 	} while(swapped);
 	return list;
 }
 
 int main() {
-	char *list;
-	list = (char *)malloc(100*sizeof(char));
-	scanf("%[^\n\r]", list);
-	printf("%s\n", list);
-	printf("%s\n", bubbleSort(list, strlen(list)));
+	int listSize = 0;
+	int bufferSize = 16;
+	bool stillScanning = true;
+	char *list = (char *)malloc(bufferSize*sizeof(char));
+	
+	while(stillScanning) {
+		while(listSize < bufferSize) {
+			char *i;
+			scanf("%c", i);
+			if(*i == '\n' || *i == '\r') {	// If input is done, stop
+				stillScanning = false;
+				break;
+			}
+			list[listSize] = *i;
+			listSize++;
+		}
+		if(stillScanning) {
+			bufferSize *= 2;
+			char *tmp = (char *)malloc(bufferSize*sizeof(char));
+			int i;
+			for(i = 0; i < listSize; i++) {
+				tmp[i] = list[i];
+			}
+			free(list);
+			list = tmp;
+			tmp = NULL;
+		}
+	}
+	
+	printf("%s", bubbleSort(list, listSize));
 	free(list);
 
 	return 0;
