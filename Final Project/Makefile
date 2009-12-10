@@ -9,9 +9,9 @@ main.o: main.s
 	gcc -Wall -g -c main.s -o main.o
 
 final.s: final.c
-	gcc -Wall -g -S final.c -o final.s
+	gcc -Wall -S final.c -o final.s
 final.o: final.s
-	gcc -Wall -g -c final.s -o final.o
+	gcc -Wall -c final.s -o final.o
 
 final: main.o final.o
 	gcc -Wall -g main.o final.o -o final
@@ -19,17 +19,17 @@ final: main.o final.o
 # Oxygen, get it? Like, O2.
 oxygen: main-O.s main-O2.s main-O3.s final-O.s final-O2.s final-O3.s
 main-O.s: main.c
-	gcc -Wall -g -O -S main.c -o main-O.s
+	gcc -Wall -O -S main.c -o main-O.s
 main-O2.s: main.c
-	gcc -Wall -g -O2 -S main.c -o main-O2.s
+	gcc -Wall -O2 -S main.c -o main-O2.s
 main-O3.s: main.c
-	gcc -Wall -g -O3 -S main.c -o main-O3.s
+	gcc -Wall -O3 -S main.c -o main-O3.s
 final-O.s: final.c
-	gcc -Wall -g -O -S final.c -o final-O.s
+	gcc -Wall -O -S final.c -o final-O.s
 final-O2.s: final.c
-	gcc -Wall -g -O2 -S final.c -o final-O2.s
+	gcc -Wall -O2 -S final.c -o final-O2.s
 final-O3.s: final.c
-	gcc -Wall -g -O3 -S final.c -o final-O3.s
+	gcc -Wall -O3 -S final.c -o final-O3.s
 
 clean:
 	rm -f *.o
