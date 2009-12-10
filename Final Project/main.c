@@ -14,11 +14,11 @@
 #define true 1
 #define false 0
 
-int main() {
-	int listSize = 0;
-	int bufferSize = 16;
+int listSize;
+int bufferSize;
+
+char* scanInput(char * list) {
 	bool stillScanning = true;
-	char *list = (char *)malloc(bufferSize*sizeof(char));
 	
 	while(stillScanning) {
 		while(listSize < bufferSize) {
@@ -44,8 +44,20 @@ int main() {
 		}
 	}
 	
-	printf("%s\n", bubbleSort(list, listSize));
-	free(list);
+	return list;
+}
 
+int main() {
+	listSize = 0;
+	bufferSize = 16;
+	
+	char *list = (char *)malloc(bufferSize*sizeof(char));
+	list = scanInput(list);
+	
+	printf("%s\n", bubbleSort(list, listSize));
+	
+	free(list);
+	
 	return 0;
 }
+
