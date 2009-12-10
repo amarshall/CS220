@@ -17,13 +17,13 @@ char* scanInput(char * list, int bufferSize) {
 	
 	while(stillScanning) {
 		if(listSize < bufferSize) {
-			char *i;  //Must *not* be initialized or will segfault
-			scanf("%c", i);
-			if(*i == '\n' || *i == '\r') {  // If input is done, stop
+			char i;
+			scanf("%c", &i);
+			if(i == '\n' || i == '\r') {  // If input is done, stop
 				stillScanning = false;
 				break;
 			}
-			list[listSize] = *i;
+			list[listSize] = i;
 			listSize++;
 		} else if(stillScanning) {  // Reallocates and copies to new space
 			bufferSize *= 2;
