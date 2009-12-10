@@ -13,15 +13,16 @@ bool bubbleSortHelper(int i, char * list, bool swapped) {
 	char *var1 = &list[i];
 	char *var2 = &list[i+1];
 	__asm__(
-		"movb (%%ebx), %%dl\n\t"
-		"cmpb %%dl, (%%ecx)\n\t"
+		"movb (%1), %%dl\n\t"
+		"cmpb %%dl, (%2)\n\t"
 		"jle noswap\n\t"
-		"movl $1, %%eax\n\t"
-		"xchgb %%dl, (%%ecx)\n\t"
-		"movb %%dl, (%%ebx)\n"
+		"movl $1, %0\n\t"
+		"xchgb %%dl, (%2)\n\t"
+		"movb %%dl, (%1)\n"
 		"noswap:\n\t"
-		:"=a" (swapped)
-		:"b" (var1), "c" (var2), "a" (swapped)
+		:"=r" (swapped)
+		:"r" (var1), "r" (var2), "0" (swapped)
+		:"edx"
 	);
 	return swapped;
 }
