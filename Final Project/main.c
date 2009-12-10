@@ -17,7 +17,7 @@ char* scanInput(char * list) {
 	
 	while(stillScanning) {
 		while(listSize < bufferSize) {
-			char *i = NULL;
+			char *i; //MUST not be initialized or will segfault
 			scanf("%c", i);
 			if(*i == '\n' || *i == '\r') {	// If input is done, stop
 				stillScanning = false;
@@ -45,8 +45,8 @@ char* scanInput(char * list) {
 int main() {
 	listSize = 0;
 	bufferSize = 16;
-	
 	char *list = (char *)malloc(bufferSize*sizeof(char));
+	
 	list = scanInput(list);
 	
 	printf("%s\n", bubbleSort(list, listSize));
