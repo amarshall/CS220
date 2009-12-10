@@ -26,6 +26,6 @@ oxygen: main.c final.c
 	gcc -Wall -g -O3 -S final.c -o final-O3.s
 
 clean:
-	rm -r *.o
-	rm -r *.s
+	rm -f *.o
+	rm -f *.s
 
