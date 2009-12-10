@@ -1,0 +1,84 @@
+ironhide:~> cd CS220/Final\ Project/
+
+ironhide:~/CS220/Final Project> make
+make: Nothing to be done for `all'.
+
+ironhide:~/CS220/Final Project> ./final 
+Hello world.
+wroollledH. 
+
+ironhide:~/CS220/Final Project> ./final
+Hello world but a bit longer to show that the dynamic allocation works.
+ywwwutttttttssrrroooooooonnnmllllllkiiihhhgeeeddccbbaaaaaH.            
+
+ironhide:~/CS220/Final Project> ./final
+Don't forget that spaces end up at the end of the output!
+uuutttttttttssrpppoooonnnhhhgffeeeeeeddcaaaD'!           
+
+ironhide:~/CS220/Final Project> ./final
+Symbols will end up at the end too! %!@$^*($@$%&(
+ywutttspooonnmllliheeeddba^S@@*((&%%$$$!!        
+
+ironhide:~/CS220/Final Project> ./final
+Capitals Will Also Always End Up At The End.
+ywttssspponnllllliiheddaaaWUTEECAAA.        
+
+ironhide:~/CS220/Final Project> ./final
+What? I forgot to test some numbers? 9845690230
+utttttsssrroooonmmhgfeeebaWI??9986543200       
+
+ironhide:~/CS220/Final Project> ./final
+hguireuhA(*#$jikreIO%U#(IjrkoJ(#%JNIREODKJ9o4im3rpEW
+uurrrrpoomkkjjiiihhgeeWUROONKJJJIIIEEDA943*(((%%$###
+
+ironhide:~/CS220/Final Project> ./final
+What happens if it's a reallllllyyy loonnngg input??? HUOEIJdfuio3u5r9eoIADJFmnip3ujr9EFIOPAHJNti34pthj(FIOPEHtj934pthenf9Phrt9eopNF(#5hr9eNR903HT(e4HTR(ut^&Tg7yuiYH*(hguiHGUI9OIKgvubol;.b.Hi[i0H*0(YHBiN)*{h98H9800hiokHGIUBV&ugh9poJO"P]}uoOPU8iuohbUIGh8uibjkBUjhguIT&65678^oup9poiJK'p[{]HIUOy8&Y&uiguibHU*HUY#$8iohnURO#Y%h8ru3ioHR*#URoghf9EINrt93FN
+}{{yyyyyvuuuuuuuuuuuuuuuuuttttttttttssrrrrrrrpppppppppppooooooooooooooonnnnnnnnmllllllllkkjjjjjiiiiiiiiiiiiiiiiiiihhhhhhhhhhhhhhhhgggggggggffffeeeeeeedbbbbbaaaa^^]][[YYYYYWVUUUUUUUUUUUTTTTRRRRRPPPPPOOOOOOOONNNNNNKKJJJJJIIIIIIIIIIIHHHHHHHHHHHHHHHHGGGFFFFFEEEEDBBBAA???;99999999999999888888887766555444333333300000..*****)((((((''&&&&&%$####"        
+
+ironhide:~/CS220/Final Project> ./final
+Isn't it great not doing all assembly anymore? 
+yyttttsssrrooonnnnmmllliiggeeedbaaaaI?'       
+
+ironhide:~/CS220/Final Project> ./final
+Not really, I'd much rather be doing C++ than C because of the stupid things it lack like not being able to declare a variable in a for loops initialization and such! Oh and the lack of a boolean is just frustrating.
+zyvuuuuuutttttttttttttttssssssssrrrrrrrrppoooooooooooonnnnnnnnnnnnmlllllllllllkkkjiiiiiiiiiiiiiiihhhhhhhhggggffffeeeeeeeeeeeeeeddddddccccccbbbbbbaaaaaaaaaaaaaaaaaaaONICC.,++'!   
+
+
+ironhide:~/CS220/Final Project> ./final
+Wow, one must test a lot of different inputs to test!!!
+wuutttttttttssssrpooooonnnmliifffeeeeedaW,!!!          
+
+ironhide:~/CS220/Final Project> ./final
+^C             
+
+ironhide:~/CS220/Final Project> ./final
+|-|0\/\/ 4B0U7 \/\/3 7r'/ $0/\/\3 L337 $P34|< |\|0\/\/ (4U$3 1'/\/\ L337 \/\/17|-| /\/\'/ 1|\|L1|\|3 4$$3/\/\BL'/ 1|\| /\/\'/ ( pr09r4/\/\ 4|\|D 4LL. '/UP, 93|\|U1|\|3 |-|4><0r3r |-|3r3 ;)
+|||||||||||||||||||||||rrrrrrp\\\\\\\\\\\\\\\\\\\\\\\\\\\UUUUPPLLLLLLDBB><<;997777744444444333333333333333111111000000/////////////////////////.----,)((''''''$$$$$                         
+
+ironhide:~/CS220/Final Project> ./final
+That was some SERIOUS L337 speak there. Yes, l337 speak is the most absurd thing ever and drives me insane, but makes it good for testing the sorting of the characters!
+wvvuutttttttttttttssssssssssssssrrrrrrrrppooooooonnnnnnmmmmlkkkiiiiiiihhhhhhhggggffeeeeeeeeeeeeeeeeeddddccbbaaaaaaaaaaYUTSSROLIE773333.,,!                              
+
+ironhide:~/CS220/Final Project> ./final
+          LOTS of SPACES                         .
+ofTSSSPOLECA.                                     
+
+ironhide:~/CS220/Final Project> ./final
+I can't wait till CS240 next semester when I can do C++ instead of C and not have stupid nuances.
+xwwvuuttttttttsssssrpooonnnnnnnnnmlliiiihhfeeeeeeeeddddcccaaaaaaaSIICCC420.++'                   
+
+ironhide:~/CS220/Final Project> ./final
+I can't believe I'm still testing input, should've written a random character test case program to test this... No idea how, but it might've been faster than this...
+wwvvvuuuttttttttttttttttttttsssssssssrrrrrrrppoooooonnnnnnnmmmmlllliiiiiiiiiihhhhhhhgggfeeeeeeeeeeeeeeedddccccbbbaaaaaaaaaaNII......,,''''                           
+
+ironhide:~/CS220/Final Project> ./final
+I wonder what happens when I put in a non-ASCII chacacter... á
+wwwutttsrrpppoonnnnnnihhhheeeedcccaaaaaSIIIICA...-           á
+
+ironhide:~/CS220/Final Project> ./final
+Well that's quite interesting. I think we're done now though?
+wwuutttttttssrrqooonnnnnllkiiiihhhhggeeeeeeedaWI?.''   
+
+ironhide:~/CS220/Final Project> ./final
+Q.E.D.
+QED...
