@@ -1,0 +1,20 @@
+# CS220 Final Project
+# PartC.txt
+# @author John Marshall (jmarsha6)
+
+
+*** Optimization Level 1 ***
+
+Many more data declarations (with -g, without -g they're not there, and the file size is then smaller), code appears to have been re-ordered so the assembly is no longer in the same order as the C source (i.e.: functions are in a different order).
+
+The leal instruction is used frequently (apparently its Load Effective Address), and appears to save several movl instructions.
+
+
+*** Optimization Level 2 ***
+
+Even more lines, appears mostly more to be data declarations (with -g, without -g they're not there, but file size is still bigger). Uses xor a lot more. Has ".p2align" appear every so often. Certain parts now appear multiple times but slightly different (for one, the inline assembly part appears twice).
+
+
+*** Optimization Level 3 ***
+
+Even more lines, again, mostly more data declarations (with -g, without -g they're not there, but file size is still bigger). The shift instruction is now used on a few occasions, the negate instruction also appeared

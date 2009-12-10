@@ -1,0 +1,7 @@
+# CS220 Final Project
+# PartB.txt
+# @author John Marshall (jmarsha6)
+
+Firstly, the inline assembly code appears to be surrounded by "#APP" and "#NOAPP" comments to indicate that it was inline assembly and not assembly generated from C source code. As the "b" size was specified on the compare and exchange commands, 8-bit registers are automatically used. For whatever reason, the "r" constraints appear to skip over using %eax and use %ebx, %cl, & %dl. Interestingly, it uses %dl before using %cl. Despite using six constraints, there are (correctly) only three registers used, as all the output constraints are paired with an input constraint.
+
+Directly before and after the inline assembly are two sections of code which move the variables specified in the constraints in/out of registers. Because of the use of the 8-bit registers, it uses movzbl to zero-extend the values when moving into the respective 32-bit registers.
