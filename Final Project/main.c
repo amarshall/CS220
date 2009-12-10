@@ -9,45 +9,13 @@
 
 #include "final.h"
 
-int listSize;
-int bufferSize;
-
-char* scanInput(char * list) {
-	bool stillScanning = true;
-	
-	while(stillScanning) {
-		while(listSize < bufferSize) {
-			char *i; //MUST not be initialized or will segfault
-			scanf("%c", i);
-			if(*i == '\n' || *i == '\r') {	// If input is done, stop
-				stillScanning = false;
-				break;
-			}
-			list[listSize] = *i;
-			listSize++;
-		}
-		if(stillScanning) {
-			bufferSize *= 2;
-			char *tmp = (char *)malloc(bufferSize*sizeof(char));
-			int i;
-			for(i = 0; i < listSize; i++) {
-				tmp[i] = list[i];
-			}
-			free(list);
-			list = tmp;
-			tmp = NULL;
-		}
-	}
-	
-	return list;
-}
-
 int main() {
-	listSize = 0;
-	bufferSize = 16;
+	int listSize = 0;
+	const int bufferSize = 16;
 	char *list = (char *)malloc(bufferSize*sizeof(char));
 	
-	list = scanInput(list);
+	list = scanInput(list, bufferSize);
+   listSize = getListSize();
 	
 	printf("%s\n", bubbleSort(list, listSize));
 	
@@ -55,4 +23,3 @@ int main() {
 	
 	return 0;
 }
-

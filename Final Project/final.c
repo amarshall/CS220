@@ -9,6 +9,56 @@
 
 #include "final.h"
 
+int listSize;
+
+char* scanInput(char * list, int bufferSize) {
+	bool stillScanning = true;
+   listSize = 0;
+	
+	while(stillScanning) {
+		if(listSize < bufferSize) {
+			char *i;  //Must *not* be initialized or will segfault
+			scanf("%c", i);
+			if(*i == '\n' || *i == '\r') {  // If input is done, stop
+				stillScanning = false;
+				break;
+			}
+			list[listSize] = *i;
+			listSize++;
+		} else if(stillScanning) {  // Reallocates and copies to new space
+			bufferSize *= 2;
+			char *tmp = (char *)malloc(bufferSize*sizeof(char));
+			int i;
+			for(i = 0; i < listSize; ++i) {
+				tmp[i] = list[i];
+			}
+			free(list);  // Free the old list
+			list = tmp;  // Point list to the new list
+		}
+	}
+	
+	return list;
+}
+
+/**
+ * Actually a "cocktail sort"
+ */
+char* bubbleSort(char * list, int size) {
+	bool swapped = false;
+	do {
+		swapped = false;
+		int i;
+		for(i = 0; i <= size-2; ++i) {
+			swapped = bubbleSortHelper(i, list, swapped);
+		}
+		if(!swapped) break;
+		for(i = size-2; i >= 0; --i) {
+			swapped = bubbleSortHelper(i, list, swapped);
+		}
+	} while(swapped);
+	return list;
+}
+
 bool bubbleSortHelper(int i, char * list, bool swapped) {
 	char *var1 = &list[i];
 	char *var2 = &list[i+1];
@@ -24,19 +74,6 @@ bool bubbleSortHelper(int i, char * list, bool swapped) {
 	return swapped;
 }
 
-char* bubbleSort(char * list, int size) {
-	bool swapped = false;
-	do {
-		swapped = false;
-		int i;
-		for(i = 0; i <= size-2; i++) {
-			swapped = bubbleSortHelper(i, list, swapped);
-		}
-		if(!swapped) break;
-		for(i = size-2; i >= 0; i--) {
-			swapped = bubbleSortHelper(i, list, swapped);
-		}
-	} while(swapped);
-	return list;
+int getListSize() {
+   return listSize;
 }
-
