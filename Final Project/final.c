@@ -13,7 +13,7 @@ int listSize;
 
 char* scanInput(char * list, int bufferSize) {
 	bool stillScanning = true;
-   listSize = 0;
+	listSize = 0;
 	
 	while(stillScanning) {
 		if(listSize < bufferSize) {
@@ -36,7 +36,6 @@ char* scanInput(char * list, int bufferSize) {
 			list = tmp;  // Point list to the new list
 		}
 	}
-	
 	return list;
 }
 

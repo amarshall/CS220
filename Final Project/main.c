@@ -15,7 +15,7 @@ int main() {
 	char *list = (char *)malloc(bufferSize*sizeof(char));
 	
 	list = scanInput(list, bufferSize);
-   listSize = getListSize();
+	listSize = getListSize();
 	
 	printf("%s\n", bubbleSort(list, listSize));
 	
