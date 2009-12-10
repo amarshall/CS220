@@ -17,7 +17,7 @@ int main() {
 	list = scanInput(list, bufferSize);
 	listSize = getListSize();
 	
-	printf("%s\n", bubbleSort(list, listSize));
+	printf("Your string sorted: %s\n", bubbleSort(list, listSize));
 	
 	free(list);
 	

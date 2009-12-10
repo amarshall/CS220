@@ -14,7 +14,7 @@ int listSize;
 char* scanInput(char * list, int bufferSize) {
 	bool stillScanning = true;
 	listSize = 0;
-	
+	printf("Enter a string: ");
 	while(stillScanning) {
 		if(listSize < bufferSize) {
 			char i;
