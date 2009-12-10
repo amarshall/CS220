@@ -9,11 +9,6 @@
 
 #include "final.h"
 
-// C++ is so much better...
-#define bool int
-#define true 1
-#define false 0
-
 bool bubbleSortHelper(int i, char * list, bool swapped) {
 	char *var1 = &list[i];
 	char *var2 = &list[i+1];

@@ -9,11 +9,6 @@
 
 #include "final.h"
 
-// C++ is so much better...
-#define bool int
-#define true 1
-#define false 0
-
 int listSize;
 int bufferSize;
 
@@ -22,7 +17,7 @@ char* scanInput(char * list) {
 	
 	while(stillScanning) {
 		while(listSize < bufferSize) {
-			char *i;
+			char *i = NULL;
 			scanf("%c", i);
 			if(*i == '\n' || *i == '\r') {	// If input is done, stop
 				stillScanning = false;
