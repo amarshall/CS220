@@ -74,5 +74,5 @@ bool bubbleSortHelper(int i, char * list, bool swapped) {
 }
 
 int getListSize() {
-   return listSize;
+	return listSize;
 }

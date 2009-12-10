@@ -17,12 +17,18 @@ final: main.o final.o
 	gcc -Wall -g main.o final.o -o final
 
 # Oxygen, get it? Like, O2.
-oxygen: main.c final.c
+oxygen: main-O.s main-O2.s main-O3.s final-O.s final-O2.s final-O3.s
+main-O.s: main.c
 	gcc -Wall -g -O -S main.c -o main-O.s
+main-O2.s: main.c
 	gcc -Wall -g -O2 -S main.c -o main-O2.s
+main-O3.s: main.c
 	gcc -Wall -g -O3 -S main.c -o main-O3.s
+final-O.s: final.c
 	gcc -Wall -g -O -S final.c -o final-O.s
+final-O2.s: final.c
 	gcc -Wall -g -O2 -S final.c -o final-O2.s
+final-O3.s: final.c
 	gcc -Wall -g -O3 -S final.c -o final-O3.s
 
 clean:
