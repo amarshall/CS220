@@ -1,4 +1,4 @@
-# CS220 Lab #5 Part A
+# CS220 Lab #5 Part B
 # @author John Marshall (jmarsha6)
 
 
@@ -30,15 +30,21 @@ main:
 
 	pushl	$8
 	pushl	$6
-	call radd
+	call	radd
+	popl	%eax
+	popl	%eax
 
 	pushl	$5
 	pushl	$14
-	call radd
+	call	radd
+	popl	%eax
+	popl	%eax
 
 	pushl	$21
 	pushl	$3
-	call radd
+	call	radd
+	popl	%eax
+	popl	%eax
 
 	leave
 	ret
@@ -66,6 +72,8 @@ radd:
 	pushl	%ebx
 	pushl	%eax
 	call	radd
+	popl	%eax
+	popl	%ebx
 base:	
 	popl	%ebx
 	popl	%eax
