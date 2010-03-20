@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Lab Assignment #6</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Lab Assignment #6</H1>
+
+<H2>Due Date: Friday 2009/11/13 - 9:00PM</H2>
+
+<P>In this lab, you will work with programs compiled from separate
+modules, and mix C and assembly language.</P>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work
+in groups.  Do not write or dictate code for anyone else, and do not use
+code from anyone else.  If you break this rule, you may fail the entire
+class.</FONT></P>
+
+<H3>Project: Part A</H3>
+
+<P>Copy the files <A HREF=repeat.c>repeat.c</A>, <A HREF=show.c>show.c</A>
+and <A HREF=show.h>show.h</A> into a new directory.  The first contains 
+a main function which calles the function "show_string", which prints a 
+string pointed to by the first argument, and returns the number of 
+characters in that string.  The second contains a definition of a 
+version of "show_string".  Construct a Makefile which compiles, 
+assembles and links these into a single executable called "repeat".</P>
+
+<P>Create your own assembly file called "show2.s", with your own 
+(initially empty) assembly version of the show_string function.</P>
+
+<P>Add to your Makefile such that this version of show_string will be 
+linked to the same main function (from the same file) as the first 
+executable in a new one called "repeat2".</P>
+
+<P><B>Wait for the TA to verify that your Makefile functions properly, 
+and your two final created programs run correctly.  Explain to the TA 
+how your Makefile works and what each part of it does.  This must be 
+done in this week's (11/02-04) lab section.  This will be part of your 
+grade for this project.</B></P>
+
+<H3>Project: Part B</H3>
+
+<P>Complete your own assembly version of the show_string function in 
+your "show2.s" file you created in part A.  Your version should print, 
+and count, each character of the string one-at-a-time (using printf's 
+"%c", or "character", printing format symbol).</P>
+
+<P><B>Wait for the TA to verify that your programs each function 
+properly at this point.  Explain to the TA how your version of the 
+function works and what each part of it does. This may be done in this 
+week's or next week's lab section.  This will be part of your grade for 
+this project.</B></P>
+
+<H3>Project: Part C</H3>
+
+<P>Write another version of the show_string function in assembly in a 
+new file called "show3.s".  This version should report only the total 
+number of vowels (one of "AaEeIiOoUu") printed, not the total number of 
+characters (though it should still print every character).</P>
+
+<P>Add to your Makefile such that this version of show_string will be 
+linked to the same main function (from the same file) as the first 
+executable in a new one called "repeat3".</P>
+
+<H3>Project: Part D</H3>
+
+<P>Write another version of the show_string function in assembly in a 
+new file called "show4.s".  This version should print the letter 
+characters with their cases reveresed (meaning "Hello" would be printed 
+as "hELLO"), but with all other characters printed normally, and all 
+characters counted, like your version from part B.</P>
+
+<P>Add to your Makefile such that this version of show_string will be 
+linked to the same main function (from the same file) as the first 
+executable in a new one called "repeat4".</P>
+
+<H3>Project: Part E</H3>
+
+<P>Write another version of the show_string function in assembly in a 
+new file called "show5.s".  This version should print all characters 
+with a ASCII value one higher than the input string.  This modification 
+to the ASCII values must be done ONLY with MMX instructions, 8 bytes at 
+a time, and can NOT modify the original string.  This version should 
+return the number of 64-bit chunks processed, instead of the number of 
+characters printed.</P>
+
+<P>Add to your Makefile such that this version of show_string will be 
+linked to the same main function (from the same file) as the first 
+executable in a new one called "repeat5".</P>
+
+<H3>Project: Part F</H3>
+
+<P>Create a new C file called "test.c" which contains a new main 
+function which will non-interactively test your show_string functions by 
+calling them with a number of different strings for testing, and 
+outputting the results returned.  Modify the makefile such that this 
+will generate 5 more executables, one for each of the versions of the 
+show_string function, called "test", "test2", "test3", "test4" and 
+"test5".</P>
+
+<P>Include the output from each of these five programs, each as plain 
+text files (.txt) with your submissions.</P>
+
+<H3>Submission:</H3>
+
+Submit your source (.s, .c and .h) files, output files, and Makefile 
+using the online submission form in the labs section of the webpage.  Do 
+not submit object (.o) files, executables or non-source assembly files.  
+If you have problems, ask the lab instructor for assistance, or send 
+e-mail to the TA, me, or the mailing list (do not send code to the 
+mailing list).<P>
+
+</BODY>
+</HTML>

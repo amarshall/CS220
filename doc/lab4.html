@@ -1,0 +1,98 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Lab Assignment #4</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Lab Assignment #4</H1>
+
+<H2>Due Date: Friday 2009/10/23 - 9:00PM - NO LATE PROJECTS ACCEPTED</H2>
+
+<P>In this lab, you write your first assembly program using multiple 
+functions, C input and C output.</P>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work 
+in groups.  Do not write or dictate code for anyone else, and do not use 
+code from anyone else.  If you break this rule, you may fail the entire 
+class.</FONT></P>
+
+<H3>Preparation</H3>
+
+<P>Create a new directory and copy the GCC Assembly Code Skeleton
+(<A HREF="skeleton.s">skeleton.s</A>) into it as the file named 
+"lab4.s". Note that this is a different assembly skeleton than in the 
+previous project(s).</P>
+
+<P>Then, create a Makefile that will assemble this single file to an 
+object file and then link it into an executable (each as separate 
+steps).</P>
+
+<P>Make sure your Makefile always uses the -Wall option to each run of 
+gcc, and be sure it has an "all" rule.  Also, be sure your name is at 
+the top of your Makefile in a comment (comments in Makefiles are lines 
+that begin with a the '#' symbol).  Be sure to test your Makefile.</P>
+
+<P><B>Wait for the TA to verify that your Makefile functions properly, 
+and your final created program runs correctly (just assembling the empty 
+skeleton for now).  Explain to the TA how your Makefile works and what 
+each part of it does.  This must be done in this week's lab section 
+(2009/10/5-7).  This will be part of your grade for this project.</B></P>
+
+<H3>Project</H3>
+
+<P>NOTE: For this project, you may only use the 80386 instructions we 
+have discussed so far in class:</P>
+
+<P>Do all of the following by modifying the code skeleton as indicated 
+within it:</P>
+
+<UL>
+
+<LI>Create a function that prints a list of longs (32-bit signed 
+integers, "%d" in printf format syntax) in memory separated by newlines 
+("\n" in printf format syntax).  This function should take two arguments 
+passed on the stack (within the frame of the previous function).  The 
+first (closest on the stack to this function's frame) should be the size 
+(number of items on the list) as a 32-bit unsigned integer, and the 
+second should be the address of the start of this list.</LI>
+
+<P><B>Wait for the TA to verify this function works correctly, and 
+explain to the TA how your code works and what each part of it does.  
+This may be done in this week's or next week's lab section, at your 
+option.</B></P>
+
+<LI>Create a function that adds two same-length lists of longs (same 
+kinds of lists as the previous point).  This function should take four 
+arguments passed on the stack.  The first should be the size of all 
+three lists as a 32-bit unsigned integer, the second and third should be 
+the addresses of the start of each of these two input lists, and the 
+fourth should be the address of the start of the output list.</LI>
+
+<LI>Create a function that reads a list of up to 128 longs (in decimal) 
+from the user (using scanf()'s "%d"), and stores them sequentially, 
+starting at the addresses passed into the function, and returns the 
+number of values entered.  Be sure your intput function is safe, does 
+not crash or lock up, and the user is able to indicate somehow how many 
+numbers to enter.</LI>
+
+<LI>In your main function, print and add a number of lists of varying 
+sizes demonstrating that your code works correctly.  Then also request 
+two lists from the user, add them (if the lists differ in size, just 
+assume the remainder of the shorter list is all zeros), then print the 
+resulting list.  You should not need to manually comment your output.  
+You should now be able to use printfs to make the actual output clear on 
+its own.  You do not need to (and should not) submit a copy of your 
+output.</LI>
+
+</UL>
+
+<H3>Submission:</H3>
+
+Submit your single .s file and Makefile using the online submission form 
+in the labs section of the webpage before 9:00PM Friday night.  Do not 
+submit object (.o) files or executables.  If you have problems, ask the 
+lab instructor for assistance, or send e-mail to the TA, me, or the 
+mailing list (do not send code to the mailing list).<P>
+
+</BODY>
+</HTML>

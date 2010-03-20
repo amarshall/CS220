@@ -1,0 +1,120 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Lab Assignment #5</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Lab Assignment #5</H1>
+
+<H2>Due Date: Friday 2009/10/30 - 9:00PM</H2>
+
+<P>In this lab, you will start using a debugger to examine your assembly 
+programs as they run.</P>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work 
+in groups.  Do not write or dictate code for anyone else, and do not use 
+code from anyone else.  If you break this rule, you may fail the entire 
+class.</FONT></P>
+
+<H3>Preparation</H3>
+
+<P>Take your corrected (if necessary) solution for <A HREF=lab2.html>Lab
+#2</A>, part B, (or create a new one if you don't still have yours).</P>
+
+<P>Add "-g" to each of the gcc commands in your makefile (along with 
+-Wall, which should already be there), remove any .o files that are 
+present, and then re-build your project with "make".  This will ensure 
+that debugging symbols are present in your created program 
+executable.</P>
+
+<P><B>Once you have this completed, have the TA verify that your 
+Makefile is working correctly and your program is being correctly built 
+with debugging symbols.  This will be part of your grade.</B> You may do 
+this during this week's lab section, or next week's.</P>
+
+<H3>Part A</H3>
+
+<P>The lecture introduced you to the basics of running a program in the 
+debugger (gdb).  Do this with your program and trace through each 
+instruction, displaying the values in the general purpose registers 
+after each step until the end of the main function (the only function in 
+this program).</P>
+
+<P><B>Once you are familiar enough with this, ask the TA to come over 
+and demonstrate this for him to show that you understand how to do this. 
+This will be part of your grade.</B> You may do this during this week's 
+lab section, or next week's.  Also copy the output from a session of gdb 
+where you do this into a text file and submit it with your project.  Ask 
+the TA for assistance if you don't understand how to do this.</P>
+
+<P>Write another simple assembly program with three (empty, aside from 
+the "enter" and "leave" code) functions (aside from main).  Have main 
+call the first, the first call the second and the second call the third.  
+Inside the third function, create a 32-bit local variable (on the local 
+frame) and use the FPU to calculate 1/PI and save that as a 32-bit IEEE 
+floating-point number to that local variable.  Add to the Makefile such 
+that it will create both the executable for the first program and an 
+executable for this one as well (ask the TA for assistance if you don't 
+understand how to do this).</P>
+
+<P>Run this program in the debugger up to a breakpoint set after setting 
+the floating point local variable is stored.  Use the backtrace ("bt") 
+command in gdb to show where your current frame is on the call stack.  
+Also use the "x" command to show the stored floating point variable in 
+hex, byte-by-byte.  Confirm the number is in IEEE floating point format, 
+and that the bytes are in little-endian order.  Step through one 
+instruction at a time from this point to the end of your program, 
+showing the call stack after every ret.  This should demonstrate the 
+calling structure of this program.</P>
+
+<P>Also copy the output from this session of gdb into a text file and 
+submit it with your project.</P>
+
+<H3>Part B</H3>
+
+<P>Write a third program which contains just main and a second function.  
+This second function should perform an addition of two unsigned 32-bit 
+numbers recursively using only increment (the "inc" instruction).  Other 
+instructions may be used for other parts of the function, but the actual 
+addition may only use "inc".  This function should be called several 
+times with different sets of values (don't make them too high or you can 
+overflow the stack) from the main function.</P>
+
+<P>Add to the Makefile such that it will create this executable along 
+with the first two (ask the TA for assistance if you don't understand 
+how to do this).</P></P>
+
+<P>Run this program in the debugger and add a breakpoint in the 
+recursive function.  Each time it stops, use the backtrace ("bt") 
+command in gdb to show where your current frame is on the call stack, 
+then continue to the next breakpoint.</P>
+
+<P>Also copy the output from this session of gdb into a text file and 
+submit it with your project.</P>
+
+<P>You don't need to finish this part of the project in lab, but this 
+entire project must be submitted by the due date above.</P>
+
+<H3>More Information:</H3>
+
+<P>Pretty much everything you may want to know about gdb can be found here:</P>
+
+<UL>
+
+<LI><A HREF="http://sources.redhat.com/gdb/current/onlinedocs/gdb_toc.html">http://sources.redhat.com/gdb/current/onlinedocs/gdb_toc.html</A></LI>
+
+</UL>
+
+<P>There are also links to more information on this on the
+<A HREF="../outline.html">Course Outline</A>.</P>
+
+<H3>Submission:</H3>
+
+Submit your .s files, output files and Makefile using the online
+submission form in the labs section of the webpage before 9:00PM Friday
+night.  Do not submit object (.o) files or executables.  If you have
+problems, ask the lab instructor for assistance, or send e-mail to the
+TA, me, or the mailing list (do not send code to the mailing list).<P>
+
+</BODY>
+</HTML>

@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Final Project</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Final Project</H1>
+
+<H2>Due Date: Friday 2009/12/11 - 9:00PM</H2>
+
+<H2>NO LATE PROJECTS WILL BE ACCEPTED!</H2>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work
+in groups.  Do not write or dictate code for anyone else, and do not use
+code from anyone else.  If you break this rule, you may fail the entire
+class.</FONT></P>
+
+<H3>Project: Part A</H3>
+
+<P>Write a C function which will input a single C string (using the C 
+scanf() function) and sort all of the ASCII characters contained in it, 
+highest-to-lowest, by ASCII value.  You must use a
+
+<A HREF="http://en.wikipedia.org/w/index.php?title=Cocktail_sort&oldid=246910452">bi-directional form</A>
+
+of the
+
+<A HREF="http://en.wikipedia.org/w/index.php?title=Bubble_sort&oldid=254081142">Bubble Sort</A>
+
+algorithm to accomplish this (each pass of the algorithm should be in 
+the opposite direction as the previous one).  This function should then 
+return this sorted string.</P>
+
+<P>Each time this algorithm must compare items and possibly swap items, 
+you should use inline assembly to accomplish this (both the comparison 
+and the possible swap).  All of the other functionality of this program 
+must be in pure C.  You must only write a single block of inline 
+assembly for this part, though it can be in a separate sub-function if 
+you want.  You must also try to make this assembly section as small and 
+efficient as possible, and must correctly employ constraints.</P>
+
+<P>The input string may not be limited in size in any way, but your 
+scanf() input must not allow writing outside of pre-allocated memory.  
+You will need to use dynamic allocation (a dynamic array) to accomplish 
+this.  Be sure to use dynamic allocation correctly.</P>
+
+<P>Create a main function in a separate C code file and link these two 
+files together to create a single program.  Add to your main function a 
+call to your function surrounded by appropriate prompts (output with C's 
+"printf" function) and code which outputs the sorted string returned by 
+your function.  Run this program several (at least 20) times with 
+various test inputs of various sizes and contents to confirm your 
+function works correctly in all cases.  Include the output of these runs 
+in one or more text files with your project submission.</P>
+
+<H3>Project: Part B</H3>
+
+<P>Look at the .s files created by your Makefile. Pay special attention 
+to the sections you defined with inline assembly. Write a brief 
+description, in your own words, of the code which you think is created 
+due to your constraint specifications for each section of inline 
+assembly in your code, and how that relates to the constraints you 
+actually specified.</P>
+
+<P>Submit this, as a text (.txt) file, with the rest of your 
+submission.</P>
+
+<H3>Project: Part C</H3>
+
+<P>Modify your Makefile to also compile (but not assemble or link) all 
+your C code with different levels of optimization (-O, -O2, and -O3) 
+into different .s files. Look through the assembly code and analyze the 
+differences.  Describe, in your own words, the differences at each level 
+of increased optimization.</P>
+
+<P>Submit this, as a text (.txt) file, with the rest of your 
+submission.</P>
+
+<H3>Submission:</H3>
+
+Submit your source (.c and .h) files, text (.txt) files and Makefile 
+using the online submission form in the labs section of the webpage.  Do 
+not submit object (.o) files, executables or non-source assembly files.  
+If you have problems, ask the lab instructor for assistance, or send 
+e-mail to the TA, me, or the mailing list (do not send code to the 
+mailing list).<P>
+
+</BODY>
+</HTML>

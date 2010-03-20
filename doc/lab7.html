@@ -1,0 +1,126 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Lab Assignment #7</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Lab Assignment #7</H1>
+
+<H2>Due Date: Wednesday 2009/12/02 - Noon</H2>
+
+<H3>Note that after this due date, there is a -25 late penalty until the 
+following day at noon, so submit it on time!</H3>
+
+<P>In this lab, you will mix floating point and MMX code.</P>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work
+in groups.  Do not write or dictate code for anyone else, and do not use
+code from anyone else.  If you break this rule, you may fail the entire
+class.</FONT></P>
+
+<H3>Project: Part A</H3>
+
+<P><B>You may not use any integer math instructions (including add, mul, 
+sub, div, cmp, etc...) to perform the calculations required in this part 
+of the lab.</B></P>
+
+<P>Use the <A HREF="skeleton.s">assembly code skeleton</A> to write a 
+single assembly program that will compute the grades for 4 fictitious 
+students in a class similar to this one, based on individual grades 
+stored in a special structure in memory.  This data will include, for 
+each student, 7 quiz grades, 7 project grades, a midterm grade and a 
+final project grade (do NOT include any final exam).</P>
+
+<P>All of these values must be byte-sized integers between 0 and 100.  
+They should be stored in such a way that all data for each student is 
+packed together, with successive students stored sequentially.</P>
+
+<P>You should define all this data globally (meaning, with .char/.byte 
+directives in the data section).</P>
+
+<P>Your program must output all of the grades for each student in a 
+readable form, and must compute the grade point average for each 
+fictional student to the nearest .01 percent and display this average in 
+decimal notation to the screen, along with the equivalent letter 
+grade.</P>
+
+<P>The grade will be computed as follows:</P>
+
+<P>
+20% Midterm Exam<BR>
+20% Final Project<BR>
+30% Quizzes (Do <I>not</I> drop any)<BR>
+30% Projects (each worth 1, 4, 15, 20, 15, 20, 25 percent respectively)<BR>
+</P>
+
+<P>You must write a separate function that will print out an entire 
+student's grades and then will calculate and output the final grades 
+(you will also want to write many sub-functions to make this function 
+easier to write). This way, your main function can simply call this 
+function with a different memory location 4 times. Also, this function 
+will be useful for part B.</P>
+
+<P>The letter grade will be computed from the overall percentage grade, 
+rounded off to two decimal places, as follows:</P>
+
+<P>
+93.00+: A<BR>
+90.00+: A-<BR>
+87.00+: B+<BR>
+83.00+: B<BR>
+80.00+: B-<BR>
+77.00+: C+<BR>
+73.00+: C<BR>
+70.00+: C-<BR>
+65.00+: D<BR>
+0.00+: F
+</P>
+
+<P>Note that a 92.99 (for example) is an A-, not an A. You do not round 
+the grade off beyond these 2 decimal places.</P>
+
+<H3>Project: Part B</H3>
+
+<P>Add a function to the program in Part A which fill in a student 
+record with the worst grade for each test, quiz or project (discounting 
+zeros unless all grades for a given assignment are zeros).</P>
+
+<P>Add another function which will fill in a student record with the 
+best grade for each test, quiz or project.</P>
+
+<P>If no student got better than a zero on a single quiz, exam, or 
+project, both the best and the worst grade must be considered to be 
+zero. Otherwise, zeros must not be included as grades for determining 
+the minimum grades.</P>
+
+<P><B>In calculating these, you may still not use normal integer math 
+instructions, and you may also not split up each student's grades into 
+chunks smaller than 64-bits at a time.</B></P>
+
+<P>These two functions should take three arguments.  The first should be 
+the address of the target student record, where the calculated student 
+data should be written, the second should be the address of the start of 
+the array of student data, and the third should be the size of (number 
+of entries in) this array.</P>
+
+<P>Use these functions to create a 5th and 6th fictitious student, one 
+with the best grades, and one with the worst.  Then, output each of 
+these student's grades just as you did the first four (including final 
+average and grade).</P>
+
+<P>Hint: you need to use MMX for this part. Think about it carefully 
+before you start coding - it really is not very difficult to code if you 
+come up with a good method. Remember to consider that you will have to 
+use floating point instructions after this MMX code, so be sure you 
+handle this correclty.</P>
+
+<H3>Submission:</H3>
+
+Submit your source (.s) file(s) and Makefile using the online submission 
+form in the labs section of the webpage.  Do not submit object (.o) 
+files, executables or non-source assembly files.  If you have problems, 
+ask the lab instructor for assistance, or send e-mail to the TA, me, or 
+the mailing list (do not send code to the mailing list).<P>
+
+</BODY>
+</HTML>

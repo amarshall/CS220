@@ -1,0 +1,211 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Lab Assignment #3</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Lab Assignment #3</H1>
+
+<H2>Due Date: Friday 2009/10/02 - 9:00PM</H2>
+
+<P>In this lab, you create your first significant assembly program.</P>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work
+in groups.  Do not write or dictate code for anyone else, and do not use
+code from anyone else.  If you break this rule, you may fail the entire
+class.</FONT></P>
+
+<P><FONT COLOR=red>This is being given to you earlier than usual.  Note 
+that this is intentional.  You should not take this week off.  This 
+project is much more complex than the last two.  Do not put this off.  
+You will need to start it well before lab this week, and will need to do 
+most of the work on your own.</FONT></P>
+
+<P><FONT COLOR=red>Note that to complete this lab, you may only use 
+things covered in lecture before we began discussing labels, jumps, 
+loops and branches (you may NOT use these).  The one exception is the 
+stack.  You may use the stack to preserve and restore register values on 
+this lab.</FONT></P>
+
+<H3>Part A</H3>
+
+<P>Create a new directory and copy the GCC Assembly Code Skeleton (<A
+HREF="skeleton_basic.s">skeleton_basic.s</A>) into it.  Then, create a
+Makefile that will assemble this single file to an object file and then
+link it into an executable (each as separate steps).</P>
+
+<P>Make sure your Makefile always uses the -Wall option to each run of
+gcc, and be sure it has an "all" rule.  Also, be sure your name is at
+the top of your Makefile in a comment (comments in Makefiles are lines
+that begin with a the '#' symbol).  Be sure to test your Makefile.</P>
+
+<P><B>Wait for the TA to verify that your Makefile functions properly, 
+and your final created program runs correctly (just assembling the empty 
+skeleton for now).  Explain to the TA how your Makefile works and what 
+each part of it does.  This must be done in this week's (2009/09/21-25) 
+lab section.  This will be part of your grade for this project.</B></P>
+
+<P>Note that the skeleton used in this project is different than in the
+previous project.  This one does not print the registers as it exits. 
+You can, however, print all the registers by inserting the following
+code anywhere in your program:</P>
+
+<PRE>
+	pushf
+	pushl	%edi
+	pushl	%esi
+	pushl	%edx
+	pushl	%ecx
+	pushl	%ebx
+	pushl	%eax
+	pushl	$.LC0
+	call	printf
+	popl	%eax
+	popl	%eax
+	popl	%ebx
+	popl	%ecx
+	popl	%edx
+	popl	%esi
+	popl	%edi
+	popf
+</PRE>
+
+<P>This can be called as many times as is needed.</P>
+
+<H3>Part B</H3>
+
+<P>Using only the instructions we have discussed in class, add code to
+the program in part A that performs the following mathematical
+computations:</P>
+
+<UL>
+
+<LI>Add the two (signed) numbers 0xA4259929E9492903 and
+0x2013AD2494AEFF72.  <B>See NOTE below</B></LI>
+
+<LI>Add the two (signed) numbers 0x2425292949290322 and
+0x2022474529AF72E2.  With the exception of the immediate values, this
+should use IDENTICAL code to the code for the previous problem.</LI>
+
+<LI>Perform two more similar additions using different number you pick
+yourself (make the numbers as different as possible).</LI>
+
+<LI>Divide the (unsigned) number 0xA241A35FE34383E4AF4563EADBCB47EF by
+the (unsigned) number 0x182341AA.</LI>
+
+<LI>Perform three more similar divisions using different number you pick
+yourself (make the numbers as different as possible).</LI>
+
+<LI>Multiply the (unsigned) numbers 0x2425292949290322 and
+0x2013AD2494AEFF72.</LI>
+
+<LI>Perform three more similar multiplications using different number
+you pick yourself (make the numbers as different as possible).</LI>
+
+</UL>
+
+<P>After each computation, print out the registers with the solution. 
+Save all of this output as a text (.txt) file and add comments (use the
+'#' comment style) to this output file which indicate where each
+solution is and why the solution is correct (verify its value with hand
+calculations).</P>
+
+<P><B>NOTE: After the first calculation, have the TA verify that your 
+program is calculating this correctly.  This must be done in this week's 
+lab section.  This will be part of your grade.</B></P>
+
+<P><B>The rest of this part can be completed outside of lab.  You do not 
+need the TA to verify any more of this in person (but see part C, for 
+more that needs to be verified).</B></P>
+
+<H3>Part C</H3>
+
+<P>In a certain computer graphics color system, intensities of red,
+green, and blue for a pixel on the screen are stored in a "packed"
+16-bit form using the following scheme:</P>
+
+<UL>
+<LI>Blue: the least significant 5 bits of the 16-bit intensity</LI>
+<LI>Green: The middle 6 bits of the 16-bit intensity</LI>
+<LI>Red: The most significant 5 bits of the 16-bit intensity</LI>
+</UL>
+
+<P>The following shows the scheme:</P>
+
+<P><TABLE BORDER=1>
+<TR><TD COLSPAN=16 ALIGN=CENTER>16-Bit Number's Bits</TD></TR>
+
+<TR>
+<TD>15</TD>
+<TD>14</TD>
+<TD>13</TD>
+<TD>12</TD>
+<TD>11</TD>
+<TD>10</TD>
+<TD>9</TD>
+<TD>8</TD>
+<TD>7</TD>
+<TD>6</TD>
+<TD>5</TD>
+<TD>4</TD>
+<TD>3</TD>
+<TD>2</TD>
+<TD>1</TD>
+<TD>0</TD>
+</TR>
+
+<TR>
+<TD COLSPAN=5 ALIGN=CENTER>Red</TD>
+<TD COLSPAN=6 ALIGN=CENTER>Green</TD>
+<TD COLSPAN=5 ALIGN=CENTER>Blue</TD>
+</TR>
+
+</TABLE>
+
+
+<P>Using only the instructions we have discussed in class, add code to
+the program in part B that performs the following calculations:</P>
+
+<UL>
+
+<LI>Set a register to 34,927 (decimal), representing a 16-bit intensity
+value, then extract the red, green and blue values from it and store
+them in other registers.  <B>See NOTE below</B>.</LI>
+
+<LI>Compute the packed 16-bit intensity that represents the red, green
+and blue values of 13, 25 and 11, respectively.</LI>
+
+<LI>Perform two more computations similar to each of the above two (4 
+more total) using different initial values that you pick yourself.</LI>
+
+</UL>
+
+<P>HINT: You will need to use bit shifting and bitwise operation
+instructions with the appropriate masks.</P>
+
+<P>After each computation, print out the registers with the solution. 
+Save all of this output as a text (.txt) file and add comments (use the
+'#' comment style) to this output file which indicate where each
+solution is and why the solution is correct (verify its value with hand
+calculations).  You may use one output file for both parts B and C, or
+two different files, at your option.  Just make it clear which is which
+by their file names if you use more than one.</P>
+
+<P><B>NOTE: After the first calculation show the TA that your program 
+works and explain how you know that it does.  This may be done either in 
+this week's or next week's lab section, at your option.  This will be 
+part of your grade.</B></P>
+
+<P><B>The rest of this part can be completed outside of lab.  You do not
+need the TA to verify any more of this in person.</B></P>
+
+<H3>Submission:</H3>
+
+Submit your single .s file, output file(s) and Makefile using the online
+submission form in the labs section of the webpage before 9:00PM next
+Friday night.  Do not submit object (.o) files or executables.  If you
+have problems, ask the lab instrucor for assistance, or send e-mail to
+the TA, me, or the mailing list.<P>
+
+</BODY>
+</HTML>

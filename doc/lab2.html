@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+   <TITLE>CS-220 Lab Assignment #2</TITLE>
+</HEAD>
+<BODY>
+
+<H1>CS-220, Lab Assignment #2</H1>
+
+<H2>Due Date: Friday 2009/09/18 - 9:00PM</H2>
+
+<P>In this lab, you begin writing your own assembly code, and will write
+your first Makefile.</P>
+
+<P><FONT COLOR=red>This is an individual assignment - you may NOT work
+in groups.  Do not write or dictate code for anyone else, and do not use
+code from anyone else.  If you break this rule, you may fail the entire
+class.</FONT></P>
+
+<H3>Part A</H3>
+
+<P>Create a new directory and copy the GCC Assembly Code Skeleton (<A 
+HREF="skeleton_printregs.s">skeleton_printregs.s</A>) into it, and 
+rename that skeleton file to "lab2.s".  Then, create a Makefile that 
+will assemble this single assembly file into an object file and then 
+link it into an executable (each as separate steps).</P>
+
+<P>Make sure your Makefile always uses the -Wall option to each run of
+gcc, and be sure it has an "all" rule.  Also, be sure your name is at
+the top of your Makefile in a comment (comments in Makefiles are lines
+that begin with a the '#' symbol).  Be sure to test your Makefile.</P>
+
+<P><B>Wait for the TA to verify that your Makefile functions properly,
+and your final created program runs correctly.  Explain to the TA how
+your Makefile works and what each part of it does.  This will be part of
+your grade for this project.</B></P>
+
+<H3>Part B</H3>
+
+<P>Starting where the code skeleton says "Insert your assembly code
+here." (this line is a comment, since it starts with a "#"), begin
+writing your own assembly instructions to do the following (in this
+order):</P>
+
+<UL>
+
+<LI>Place the number 232 (Decimal) into the eax register.</LI>
+
+<LI>Place the number 0x14A (Hexadecimal) into the edx register.</LI>
+
+<LI>Swap these two registers' values using a single instruction and no
+additional registers.</LI>
+
+<LI>Multiply the value of the eax register by 3, and save the result 
+back into the eax register.</LI>
+
+<LI>Place the number 0x12345678 (Hexadecimal) into the ebx register.</LI>
+
+<LI>Replace the lower 16 bits of ebx with 0xFFFF</LI>
+
+<LI>Replace the lower 8 bits of ebx with 0xDD</LI>
+
+<LI>Place the number 0b01110001 (Binary) into the cl register.</LI>
+
+<LI>Add the number 0xFEDCBA98 to the value already in the ebx 
+register.</LI>
+
+<LI>Add the number already in the edx register to the value already in 
+the eax register, also adding in the carry from the addition from the 
+previous step.</LI>
+
+</UL>
+
+<P>Run this program and look at the values output (these are the
+contents of the general purpose registers at the end of your code).</P>
+
+<P><B>Wait for the TA to verify that your program performs correctly.
+Explain to the TA how your program works, and explain the output it
+generates.  This will be part of your grade for this project.</B></P>
+
+<H3>Submission:</H3>
+
+Submit your single .s file and Makefile using the online submission form
+in the labs section of the webpage before 9:00PM Friday night.  Do not
+submit object (.o) files or executables.  If you have problems, ask the
+lab instrucor for assistance, or send e-mail to the TA, me, or the
+mailing list.<P>
+
+</BODY>
+</HTML>
