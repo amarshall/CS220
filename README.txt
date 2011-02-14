@@ -1,1 +1,5 @@
-Projects and labs from CS220, fall 2009 at Binghamton University under Professor Steaphan Greene. Descriptions of the assignments are available online at http://www.cs.binghamton.edu/~sgreene/cs220-2009f/labs/index.html and are duplicated in the /doc directory of the repository. License is available in the "LICENSE" file.
+Projects from CS 220 at Binghamton University with Prof. Steaphan Greene, Fall 2009.
+
+Details of the assignments are in the doc/ directory. The license is available in the LICENSE file.
+
+None of this code is guaranteed to be correct, though most of it is.
